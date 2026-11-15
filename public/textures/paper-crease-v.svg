@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="760" viewBox="0 0 24 760" preserveAspectRatio="none">
+  <!-- Original T02 artwork: broad uneven compression, a worn ridge and broken fibres. -->
+  <defs>
+    <linearGradient id="valley" x1="0" x2="1">
+      <stop stop-color="#766447" stop-opacity="0"/>
+      <stop offset=".38" stop-color="#766447" stop-opacity=".10"/>
+      <stop offset=".51" stop-color="#675339" stop-opacity=".16"/>
+      <stop offset=".63" stop-color="#fff9e9" stop-opacity=".30"/>
+      <stop offset="1" stop-color="#fff9e9" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#valley)" d="M3 0 Q7 35 4 71 T5 143 Q2 175 5 210 T4 279 Q7 319 3 358 T5 429 Q2 470 5 510 T4 578 Q7 610 3 648 T5 714 L4 760 H21 Q18 727 20 698 T19 630 Q22 589 19 553 T20 481 Q17 440 20 403 T19 329 Q22 289 19 252 T20 174 Q17 133 20 95 T19 30 L21 0Z"/>
+  <g fill="none" stroke-linecap="round">
+    <path stroke="#fff9e9" stroke-opacity=".30" stroke-width="1.2" d="M12.6 0l-.8 18 .5 21-.3 12m.7 13-.9 17 .6 24m.4 9-.5 26 .6 13-.9 20m.2 11 .5 19-.7 13 .4 22m-.4 17 .8 25-.4 13m-.3 16 .9 23-.7 18 .4 15m.3 17-.8 19 .5 27m-.2 13 .4 20-.6 18m.5 12-.8 26 .7 16m-.4 13 .6 23-.8 20 .4 19m.2 11-.6 22 .5 29m-.2 13 .6 20-.7 26m.5 9-.5 23 .7 18m-.3 13 .3 20-.7 16"/>
+    <path stroke="#6d5a3f" stroke-opacity=".12" stroke-width=".7" d="M10.9 8l.4 28m-.5 21 .7 16m-.4 31-.5 22m.8 31-.6 27m.3 42 .5 19m-.9 21 .7 28m-.4 32-.5 24m.6 29 .3 20m-.8 30 .6 26m-.2 23-.5 22m.8 33-.4 18m.2 31-.6 24m.8 18-.5 23m.3 33 .4 27m-.8 18 .5 24"/>
+    <path stroke="#fff9e9" stroke-opacity=".36" stroke-width=".65" d="M9 29l5-4m-4 23 4-3m-4 48 5-5m-6 49 5-3m-4 28 4-5m-5 43 5-4m-4 34 4-3m-5 54 6-5m-6 37 5-3m-4 28 4-4m-5 49 6-4m-5 38 5-5m-6 47 5-4m-4 26 4-3m-5 38 6-5m-5 48 4-3m-4 35 5-5m-5 42 5-3m-4 36 5-4m-6 38 5-4"/>
+  </g>
+</svg>

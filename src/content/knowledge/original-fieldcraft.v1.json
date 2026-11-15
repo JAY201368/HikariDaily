@@ -1,0 +1,867 @@
+{
+  "source": {
+    "id": "hikari-original-fieldcraft",
+    "version": 1,
+    "title": "逐光原创摄影现场方法",
+    "author": "HikariDaily 项目原创知识编辑",
+    "sourceFile": "src/content/knowledge/original-fieldcraft.v1.json",
+    "permission": "CC BY 4.0",
+    "permissionUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "updatedAt": "2026-10-27T00:00:00+08:00",
+    "original": true
+  },
+  "chunks": [
+    {
+      "id": "landscape-subject",
+      "locator": "#/chunks/0",
+      "title": "近景建立尺度",
+      "text": "用河岸石块、树枝或栏杆建立近景，再让远处建筑形成背景。近景留出能看见轮廓的间隔，避免把所有层次压在同一条边缘。",
+      "topics": [
+        "subject"
+      ],
+      "keywords": [
+        "主体",
+        "风光",
+        "层次"
+      ],
+      "conditions": {
+        "genres": [
+          "landscape"
+        ],
+        "phases": [],
+        "characters": [],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": [
+          "thunderstorm",
+          "heavy-rain",
+          "strong-wind"
+        ]
+      }
+    },
+    {
+      "id": "landscape-light",
+      "locator": "#/chunks/1",
+      "title": "散射光下找色块",
+      "text": "散射光削弱地面明暗边界，可以拍树叶、墙面和水面之间的色块关系。把反光过亮的部分移到画面边缘，让主体颜色更集中。",
+      "topics": [
+        "light"
+      ],
+      "keywords": [
+        "柔光",
+        "色块",
+        "阴天"
+      ],
+      "conditions": {
+        "genres": [
+          "landscape"
+        ],
+        "phases": [],
+        "characters": [
+          "diffuse"
+        ],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": []
+      }
+    },
+    {
+      "id": "landscape-composition",
+      "locator": "#/chunks/2",
+      "title": "边缘与留白",
+      "text": "先整理画面边缘的杂物，再决定天空与地面的比例。利用河岸或道路把视线引到主体，避免引导线直接冲出画面。",
+      "topics": [
+        "composition"
+      ],
+      "keywords": [
+        "构图",
+        "引导线",
+        "留白"
+      ],
+      "conditions": {
+        "genres": [
+          "landscape"
+        ],
+        "phases": [],
+        "characters": [],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": []
+      }
+    },
+    {
+      "id": "landscape-viewpoint",
+      "locator": "#/chunks/3",
+      "title": "低机位与侧向移动",
+      "text": "降低相机使近景形成框边，再左右移动寻找前后景的间隔。远处轮廓不足时缩小天空比例，把叙事交给近景纹理。",
+      "topics": [
+        "viewpoint"
+      ],
+      "keywords": [
+        "视角",
+        "近景",
+        "机位"
+      ],
+      "conditions": {
+        "genres": [
+          "landscape"
+        ],
+        "phases": [],
+        "characters": [],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": [
+          "thunderstorm",
+          "heavy-rain",
+          "strong-wind"
+        ]
+      }
+    },
+    {
+      "id": "landscape-alternative",
+      "locator": "#/chunks/4",
+      "title": "室内建筑细节",
+      "text": "转到可进入的室内空间，拍窗框、楼梯和墙面纹理。用重复线条组织画面，把门洞当作边界，突出近处的结构与材质。",
+      "topics": [
+        "alternative"
+      ],
+      "keywords": [
+        "替代",
+        "室内",
+        "纹理"
+      ],
+      "conditions": {
+        "genres": [
+          "landscape"
+        ],
+        "phases": [],
+        "characters": [],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": []
+      }
+    },
+    {
+      "id": "landscape-gear",
+      "locator": "#/chunks/5",
+      "title": "稳固支撑与边缘检查",
+      "text": "使用稳固支撑可以细致调整构图。安装相机后检查支撑是否牢靠、画面边缘是否整洁，再决定取景范围。对主体亮部测光，检查高光细节后调整曝光。",
+      "topics": [
+        "gear"
+      ],
+      "keywords": [
+        "器材",
+        "支撑",
+        "构图"
+      ],
+      "conditions": {
+        "genres": [
+          "landscape"
+        ],
+        "phases": [],
+        "characters": [],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": [
+          "thunderstorm",
+          "heavy-rain",
+          "strong-wind"
+        ]
+      }
+    },
+    {
+      "id": "landscape-film",
+      "locator": "#/chunks/6",
+      "title": "风光胶片的色彩层次",
+      "text": "彩色负片适合保留植物、建筑和天空之间的颜色关系；黑白负片把重点转向轮廓与纹理；彩色反转片强调色彩分区。拍植物时让叶片与背景色分开，拍建筑时用明暗层次突出材质。",
+      "topics": [
+        "film"
+      ],
+      "keywords": [
+        "胶片",
+        "色彩",
+        "纹理"
+      ],
+      "conditions": {
+        "genres": [
+          "landscape"
+        ],
+        "phases": [],
+        "characters": [],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": []
+      }
+    },
+    {
+      "id": "landscape-direct",
+      "locator": "#/chunks/7",
+      "title": "直射光的体积",
+      "text": "直射光有明确的受光面与背光面。侧向取景可让建筑和地形形成体积，避免把主体亮边与明亮背景重叠。",
+      "topics": [
+        "direct"
+      ],
+      "keywords": [
+        "直射",
+        "侧光",
+        "体积"
+      ],
+      "conditions": {
+        "genres": [
+          "landscape"
+        ],
+        "phases": [
+          "day",
+          "golden"
+        ],
+        "characters": [
+          "direct"
+        ],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": [
+          "thunderstorm",
+          "heavy-rain",
+          "strong-wind"
+        ]
+      }
+    },
+    {
+      "id": "landscape-night",
+      "locator": "#/chunks/8",
+      "title": "夜景中的近景结构",
+      "text": "夜间用已经点亮的窗户或街灯建立视觉中心，将近景轮廓与建筑亮点错开。用稳固支撑细调建筑边缘，对亮着的窗户测光并检查灯光细节。",
+      "topics": [
+        "night"
+      ],
+      "keywords": [
+        "夜间",
+        "灯光",
+        "支撑"
+      ],
+      "conditions": {
+        "genres": [
+          "landscape"
+        ],
+        "phases": [
+          "night"
+        ],
+        "characters": [],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": [
+          "thunderstorm",
+          "heavy-rain",
+          "strong-wind"
+        ]
+      }
+    },
+    {
+      "id": "portrait-subject",
+      "locator": "#/chunks/9",
+      "title": "人物动作与环境",
+      "text": "让人物整理衣领、扶着栏杆或自然行走，把动作安排在背景线条较少的位置。拍半身时保留手的完整关系，用环境说明人物所处的空间。",
+      "topics": [
+        "subject"
+      ],
+      "keywords": [
+        "人像",
+        "主体",
+        "动作"
+      ],
+      "conditions": {
+        "genres": [
+          "portrait"
+        ],
+        "phases": [],
+        "characters": [],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": [
+          "thunderstorm",
+          "heavy-rain",
+          "strong-wind"
+        ]
+      }
+    },
+    {
+      "id": "portrait-light",
+      "locator": "#/chunks/10",
+      "title": "散射光的人物面部",
+      "text": "散射光下让人物朝向开阔处，把脸从暗背景中分离。先观察眼窝和下颌的明暗，再轻转肩膀，让面部和身体的方向形成变化。",
+      "topics": [
+        "light"
+      ],
+      "keywords": [
+        "柔光",
+        "面部",
+        "朝向"
+      ],
+      "conditions": {
+        "genres": [
+          "portrait"
+        ],
+        "phases": [],
+        "characters": [
+          "diffuse"
+        ],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": []
+      }
+    },
+    {
+      "id": "portrait-composition",
+      "locator": "#/chunks/11",
+      "title": "人物周围的空白",
+      "text": "在人物视线前方留出空间，避开穿过头部的栏杆或树枝。用背景的疏密衬托轮廓，让衣服与背景的颜色有清楚分离。",
+      "topics": [
+        "composition"
+      ],
+      "keywords": [
+        "构图",
+        "留白",
+        "背景"
+      ],
+      "conditions": {
+        "genres": [
+          "portrait"
+        ],
+        "phases": [],
+        "characters": [],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": []
+      }
+    },
+    {
+      "id": "portrait-viewpoint",
+      "locator": "#/chunks/12",
+      "title": "平视与背景错位",
+      "text": "先以人物眼睛附近的高度平视，再轻微左右移动，观察鼻梁、肩线和背景的关系。改变站位比只转动相机更能消除轮廓重叠。",
+      "topics": [
+        "viewpoint"
+      ],
+      "keywords": [
+        "视角",
+        "平视",
+        "机位"
+      ],
+      "conditions": {
+        "genres": [
+          "portrait"
+        ],
+        "phases": [],
+        "characters": [],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": [
+          "thunderstorm",
+          "heavy-rain",
+          "strong-wind"
+        ]
+      }
+    },
+    {
+      "id": "portrait-alternative",
+      "locator": "#/chunks/13",
+      "title": "窗边的人物与动作",
+      "text": "转到获准进入的室内窗边，让人物朝向窗户，拍手部动作和侧面轮廓。保持人与窗框之间的间距，把室内杂物移出构图边缘。",
+      "topics": [
+        "alternative"
+      ],
+      "keywords": [
+        "替代",
+        "室内",
+        "窗边"
+      ],
+      "conditions": {
+        "genres": [
+          "portrait"
+        ],
+        "phases": [],
+        "characters": [],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": []
+      }
+    },
+    {
+      "id": "portrait-gear",
+      "locator": "#/chunks/14",
+      "title": "人物互动与器材",
+      "text": "先确定人物可自然活动的范围，再选能容纳动作的取景距离。需要补光时先协调人物和灯的位置，避开眩光。对面部测光，观察额头与脸颊亮部的细节后调整灯的位置。",
+      "topics": [
+        "gear"
+      ],
+      "keywords": [
+        "器材",
+        "补光",
+        "距离"
+      ],
+      "conditions": {
+        "genres": [
+          "portrait"
+        ],
+        "phases": [],
+        "characters": [],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": [
+          "thunderstorm",
+          "heavy-rain",
+          "strong-wind"
+        ]
+      }
+    },
+    {
+      "id": "portrait-film",
+      "locator": "#/chunks/15",
+      "title": "肤色与颗粒的选择",
+      "text": "彩色负片可围绕肤色、服装与背景的颜色关系组织画面；黑白负片强调面部明暗和衣料纹理；彩色反转片让服装色块更鲜明。较高感光度适合记录动作时的工作需求，颗粒也成为画面质感。",
+      "topics": [
+        "film"
+      ],
+      "keywords": [
+        "胶片",
+        "肤色",
+        "颗粒"
+      ],
+      "conditions": {
+        "genres": [
+          "portrait"
+        ],
+        "phases": [],
+        "characters": [],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": []
+      }
+    },
+    {
+      "id": "portrait-direct",
+      "locator": "#/chunks/16",
+      "title": "人物的侧向直射光",
+      "text": "直射光下将人物转成侧向受光，观察面部亮部与背景是否分离。把亮边与头发暗部并置，可突出轮廓；人物不必正对强光。",
+      "topics": [
+        "direct"
+      ],
+      "keywords": [
+        "直射",
+        "侧光",
+        "轮廓"
+      ],
+      "conditions": {
+        "genres": [
+          "portrait"
+        ],
+        "phases": [
+          "day",
+          "golden"
+        ],
+        "characters": [
+          "direct"
+        ],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": [
+          "thunderstorm",
+          "heavy-rain",
+          "strong-wind"
+        ]
+      }
+    },
+    {
+      "id": "portrait-night",
+      "locator": "#/chunks/17",
+      "title": "夜间环境人像",
+      "text": "夜间寻找已经点亮的橱窗，把人物放在灯光能照到的位置，背景保留少量灯点。先观察面部光线，再通过移动人物整理背景。",
+      "topics": [
+        "night"
+      ],
+      "keywords": [
+        "夜间",
+        "橱窗",
+        "灯光"
+      ],
+      "conditions": {
+        "genres": [
+          "portrait"
+        ],
+        "phases": [
+          "night"
+        ],
+        "characters": [],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": [
+          "thunderstorm",
+          "heavy-rain",
+          "strong-wind"
+        ]
+      }
+    },
+    {
+      "id": "street-subject",
+      "locator": "#/chunks/18",
+      "title": "动作与街道关系",
+      "text": "选择行人经过的门洞、招牌或公交站作为舞台，等待动作与空间发生关系。画面需要清楚的主体，避免把每个路人都放到同样显眼的位置。",
+      "topics": [
+        "subject"
+      ],
+      "keywords": [
+        "街拍",
+        "主体",
+        "动作"
+      ],
+      "conditions": {
+        "genres": [
+          "street"
+        ],
+        "phases": [],
+        "characters": [],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": [
+          "thunderstorm",
+          "heavy-rain",
+          "strong-wind"
+        ]
+      }
+    },
+    {
+      "id": "street-light",
+      "locator": "#/chunks/19",
+      "title": "柔光街道的颜色",
+      "text": "散射光下街道明暗差距较小，可以用店面、衣服与标识的颜色区分主体。寻找相邻色块的边界，让行人的动作打破静态排列。",
+      "topics": [
+        "light"
+      ],
+      "keywords": [
+        "柔光",
+        "色块",
+        "街道"
+      ],
+      "conditions": {
+        "genres": [
+          "street"
+        ],
+        "phases": [],
+        "characters": [
+          "diffuse"
+        ],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": []
+      }
+    },
+    {
+      "id": "street-composition",
+      "locator": "#/chunks/20",
+      "title": "重复线条中的变化",
+      "text": "把连续窗格、门柱或标线当作节奏，在边缘留出完整的重复单元。等待主体进入单元之间的空隙，让一个动作打破重复。",
+      "topics": [
+        "composition"
+      ],
+      "keywords": [
+        "构图",
+        "重复",
+        "节奏"
+      ],
+      "conditions": {
+        "genres": [
+          "street"
+        ],
+        "phases": [],
+        "characters": [],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": []
+      }
+    },
+    {
+      "id": "street-viewpoint",
+      "locator": "#/chunks/21",
+      "title": "站位与前后景",
+      "text": "靠近墙边减少无关背景，侧向移动寻找行人与招牌的间隔。用门框形成前景边界，让主体通过空隙；拍摄时保持通行空间。",
+      "topics": [
+        "viewpoint"
+      ],
+      "keywords": [
+        "视角",
+        "前景",
+        "机位"
+      ],
+      "conditions": {
+        "genres": [
+          "street"
+        ],
+        "phases": [],
+        "characters": [],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": [
+          "thunderstorm",
+          "heavy-rain",
+          "strong-wind"
+        ]
+      }
+    },
+    {
+      "id": "street-alternative",
+      "locator": "#/chunks/22",
+      "title": "有遮挡空间的街头细节",
+      "text": "转到可进入的商场或有遮挡的通道，拍招牌、手部动作和店面陈列。用重复线条与衣服颜色形成画面，让人物动作打破陈列的静态排列。",
+      "topics": [
+        "alternative"
+      ],
+      "keywords": [
+        "替代",
+        "室内",
+        "细节"
+      ],
+      "conditions": {
+        "genres": [
+          "street"
+        ],
+        "phases": [],
+        "characters": [],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": []
+      }
+    },
+    {
+      "id": "street-gear",
+      "locator": "#/chunks/23",
+      "title": "街头器材与行走",
+      "text": "选择能稳定握持的器材并预留通行距离，先观察人流再抬起相机。轻便器材有助于持续等待和移动，靠近主体整理背景，用快门控制动作模糊。",
+      "topics": [
+        "gear"
+      ],
+      "keywords": [
+        "器材",
+        "手持",
+        "行走"
+      ],
+      "conditions": {
+        "genres": [
+          "street"
+        ],
+        "phases": [],
+        "characters": [],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": [
+          "thunderstorm",
+          "heavy-rain",
+          "strong-wind"
+        ]
+      }
+    },
+    {
+      "id": "street-film",
+      "locator": "#/chunks/24",
+      "title": "街头颜色与明暗",
+      "text": "彩色负片可保留招牌和衣服的颜色呼应；黑白负片强调明暗、轮廓与重复线条；彩色反转片强调简洁的色块。拍摄时等待衣服颜色与招牌呼应，让人物动作形成画面节奏。",
+      "topics": [
+        "film"
+      ],
+      "keywords": [
+        "胶片",
+        "街拍",
+        "色彩"
+      ],
+      "conditions": {
+        "genres": [
+          "street"
+        ],
+        "phases": [],
+        "characters": [],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": []
+      }
+    },
+    {
+      "id": "street-direct",
+      "locator": "#/chunks/25",
+      "title": "明暗边界的街头舞台",
+      "text": "直射光形成明确明暗边界时，先找背景简洁的亮面，再等待人物进入。让影子与主体方向相互配合，避免同时追逐过多动作。",
+      "topics": [
+        "direct"
+      ],
+      "keywords": [
+        "直射",
+        "影子",
+        "边界"
+      ],
+      "conditions": {
+        "genres": [
+          "street"
+        ],
+        "phases": [
+          "day",
+          "golden"
+        ],
+        "characters": [
+          "direct"
+        ],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": [
+          "thunderstorm",
+          "heavy-rain",
+          "strong-wind"
+        ]
+      }
+    },
+    {
+      "id": "street-night",
+      "locator": "#/chunks/26",
+      "title": "灯光下的街头动作",
+      "text": "夜间以亮着的招牌和橱窗形成局部舞台，等待人物进入光照范围。用暗处保留间隔，让少量亮点组织街道层次。",
+      "topics": [
+        "night"
+      ],
+      "keywords": [
+        "夜间",
+        "招牌",
+        "灯光"
+      ],
+      "conditions": {
+        "genres": [
+          "street"
+        ],
+        "phases": [
+          "night"
+        ],
+        "characters": [],
+        "weather": [],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": [
+          "thunderstorm",
+          "heavy-rain",
+          "strong-wind"
+        ]
+      }
+    },
+    {
+      "id": "landscape-rain",
+      "locator": "#/chunks/27",
+      "title": "降雨预报下的室内题材",
+      "text": "预报有雨时选择可进入的室内窗边拍建筑框架与墙面纹理。若路面有积水，再以低机位收进倒影；地面干燥时用窗框与建筑轮廓组织层次。",
+      "topics": [
+        "alternative",
+        "subject",
+        "weather"
+      ],
+      "keywords": [
+        "雨",
+        "预报",
+        "室内",
+        "倒影"
+      ],
+      "conditions": {
+        "genres": [
+          "landscape"
+        ],
+        "phases": [],
+        "characters": [],
+        "weather": [
+          "rain-forecast"
+        ],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": []
+      }
+    },
+    {
+      "id": "portrait-rain",
+      "locator": "#/chunks/28",
+      "title": "降雨预报下的室内题材",
+      "text": "预报有雨时把人物动作安排在获准进入的室内。用窗框与衣服颜色衬托面部，先整理人物手部和背景关系，让人物轻转肩膀形成姿态变化。",
+      "topics": [
+        "alternative",
+        "subject",
+        "weather"
+      ],
+      "keywords": [
+        "雨",
+        "预报",
+        "室内",
+        "倒影"
+      ],
+      "conditions": {
+        "genres": [
+          "portrait"
+        ],
+        "phases": [],
+        "characters": [],
+        "weather": [
+          "rain-forecast"
+        ],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": []
+      }
+    },
+    {
+      "id": "street-rain",
+      "locator": "#/chunks/29",
+      "title": "降雨预报下的室内题材",
+      "text": "预报有雨时拍室内店面陈列与手部动作。若通道外出现积水，可在安全室内位置取景收进倒影；地面干燥时转拍招牌与衣服颜色的呼应。",
+      "topics": [
+        "alternative",
+        "subject",
+        "weather"
+      ],
+      "keywords": [
+        "雨",
+        "预报",
+        "室内",
+        "倒影"
+      ],
+      "conditions": {
+        "genres": [
+          "street"
+        ],
+        "phases": [],
+        "characters": [],
+        "weather": [
+          "rain-forecast"
+        ],
+        "equipment": [],
+        "aesthetics": [],
+        "excludedRisks": []
+      }
+    }
+  ]
+}

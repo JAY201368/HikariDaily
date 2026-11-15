@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="逐光日刊拍摄计划本的桌面交互原型。锁线胶装、左右对开、固定纸页与独立图片批注。">
+  <title>拍摄计划本 · 逐光日刊</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <a class="wordmark" href="#" id="brand">逐光<span>HIKARI DAILY</span></a>
+    <div class="prototype-caption">拍摄计划本<span>桌面交互原型</span></div>
+    <button class="quiet-button" id="about-button">原型说明</button>
+  </header>
+
+  <main class="workspace" aria-label="拍摄计划本">
+    <div class="book-viewport" id="book-viewport">
+      <div class="book-scene" id="book-scene">
+        <div class="book-actions">
+          <button class="quiet-button back-to-index" id="back-button">← 回到目录</button>
+          <span id="breadcrumb">我的拍摄计划</span>
+          <button class="quiet-button" id="close-book">合上计划本 ↗</button>
+        </div>
+        <div class="book" id="book">
+          <div class="book-board" aria-hidden="true"></div>
+          <div class="page-edges" aria-hidden="true"></div>
+          <div class="spread" id="spread"></div>
+          <div class="binding" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+          <nav class="section-tabs" id="section-tabs" aria-label="计划栏目"></nav>
+          <div class="ribbon" aria-hidden="true"></div>
+        </div>
+        <div class="cover" id="cover" hidden>
+          <button id="open-book" aria-label="打开拍摄计划本，查看目录">
+            <span class="cover-imprint">逐光</span>
+            <span class="cover-title">拍摄计划本</span>
+            <span class="cover-subtitle">PHOTOGRAPHY JOURNAL</span>
+            <span class="cover-year">2026</span>
+            <span class="cover-open">打开计划本 →</span>
+          </button>
+        </div>
+        <footer class="book-footer">
+          <button class="quiet-button" id="thumb-toggle" aria-expanded="false">▦ 页览</button>
+          <div class="page-navigation"><button id="previous-page" aria-label="上一对页">←</button><span id="page-counter">目录</span><button id="next-page" aria-label="下一对页">→</button></div>
+          <button class="save-status" id="save-status" aria-live="polite">● 示例已载入</button>
+        </footer>
+        <div class="thumbnail-strip" id="thumbnail-strip" hidden aria-label="页面缩略图"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="app-footer"><span>锁线胶装 · 浅米白纸页</span><span>示例内容 · 编辑保存在此浏览器</span></footer>
+  <div class="toast" id="toast" role="status" hidden></div>
+  <input type="file" id="photo-input" accept="image/*" multiple hidden>
+
+  <dialog class="writing-dialog" id="writing-dialog">
+    <form id="writing-form">
+      <div class="dialog-heading"><div><span class="eyebrow">新建计划</span><h2 id="writing-title">写下拍摄想法</h2></div><button type="button" class="icon-button" id="writing-cancel" aria-label="取消书写">×</button></div>
+      <div id="writing-fields"></div>
+      <div class="writing-bottom"><span>创建后可直接在纸页上填写</span><button class="primary-button" type="submit">创建计划</button></div>
+    </form>
+  </dialog>
+
+  <dialog class="annotation-dialog" id="annotation-dialog">
+    <div class="annotation-heading"><div><span class="eyebrow">单图批注</span><h2 id="annotation-title">参考图</h2></div><button id="annotation-cancel" class="quiet-button">取消</button><button id="annotation-done" class="primary-button">完成</button></div>
+    <div class="annotation-workspace">
+      <div class="annotation-stage">
+        <div class="annotation-image-wrap" id="annotation-image-wrap">
+          <aside class="annotation-tools" aria-label="批注工具">
+            <button class="selected" data-tool="pen">画笔</button>
+            <button data-tool="arrow">箭头</button>
+            <button data-tool="text">文字</button>
+            <span aria-hidden="true"></span>
+            <button id="annotation-undo" aria-label="撤销批注">↶</button>
+            <button id="annotation-redo" aria-label="重做批注">↷</button>
+            <input id="annotation-color" type="color" value="#9c5c43" aria-label="批注颜色">
+            <button id="annotation-clear">清空</button>
+          </aside>
+          <img id="annotation-image" alt="正在批注的原图">
+          <canvas id="annotation-canvas" aria-label="在图片上绘制批注"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="annotation-foot"><span id="annotation-hint">按住并拖动画笔</span><span>完成后返回原书页</span></div>
+    <div class="annotation-text-entry" id="annotation-text-entry" hidden><label>批注文字<input id="annotation-text" maxlength="100" placeholder="例如：人物站在这里"></label><button id="annotation-text-add" class="primary-button">写入图片</button></div>
+  </dialog>
+
+  <dialog class="small-dialog" id="confirm-dialog"><h2 id="confirm-title">移入回收夹</h2><p id="confirm-copy"></p><div class="dialog-buttons"><button id="confirm-cancel" class="quiet-button">保留</button><button id="confirm-done" class="primary-button">移入回收夹</button></div></dialog>
+
+  <dialog class="about-dialog" id="about-dialog">
+    <div class="dialog-heading"><h2>原型说明</h2><button class="icon-button" id="about-close" aria-label="关闭说明">×</button></div>
+    <p>这是逐光日刊拍摄计划本的桌面设计原型。可以翻阅目录、创建和编辑计划、贴图、批注、搜索及恢复删除的计划。</p>
+    <h3>数据与排版</h3><p>全部修改保存在当前浏览器。点击文字即可原处编辑当前字段，空白处显示填写提示。长文按固定纸幅自动续页，拍摄想法的续页紧接首页。准备事项可以新增、修改、勾选和删除，手动添加的资料页可以整组删除并撤销恢复。</p>
+    <h3>状态预览</h3><div class="state-buttons"><button data-preview="empty">空计划</button><button data-preview="long">长文续页</button><button data-preview="save-error">保存失败</button><button data-preview="upload-error">上传失败</button><button id="reset-demo">恢复示例内容</button></div>
+    <h3>参考图来源</h3><p>江岸参考图与纸纹沿用项目已有本地设计素材，出处见项目 public/PROVENANCE.md。计划日期、安排及说明为原型示例。</p>
+    <p class="keyboard-note">← → 翻页　Esc 关闭当前浮层　Tab 依次访问控件<br>⌘ / Ctrl + Z 撤销修改　⌘ / Ctrl + Shift + Z 重做</p>
+  </dialog>
+  <textarea class="inline-field text-lines measure-page" id="measure-page" rows="1" tabindex="-1" aria-hidden="true"></textarea>
+  <script src="app.js"></script>
+</body>
+</html>

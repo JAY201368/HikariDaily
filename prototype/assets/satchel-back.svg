@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="600" viewBox="0 0 1000 600">
+<defs>
+ <linearGradient id="hide" x1="0" y1="0" x2=".3" y2="1"><stop stop-color="#98704c"/><stop offset=".16" stop-color="#704b32"/><stop offset=".5" stop-color="#503322"/><stop offset=".78" stop-color="#724c32"/><stop offset="1" stop-color="#302119"/></linearGradient>
+ <linearGradient id="edge"><stop stop-color="#201711"/><stop offset=".25" stop-color="#a77d52"/><stop offset=".45" stop-color="#493122"/><stop offset=".72" stop-color="#7a5235"/><stop offset="1" stop-color="#241911"/></linearGradient>
+ <linearGradient id="lining" x2=".2" y2="1"><stop stop-color="#151914"/><stop offset=".35" stop-color="#34372c"/><stop offset=".7" stop-color="#414438"/><stop offset="1" stop-color="#1b2019"/></linearGradient>
+ <linearGradient id="brass" x2=".7" y2="1"><stop stop-color="#51391d"/><stop offset=".25" stop-color="#c8aa70"/><stop offset=".45" stop-color="#80643b"/><stop offset=".65" stop-color="#d4bb7f"/><stop offset="1" stop-color="#49331a"/></linearGradient>
+ <filter id="grain"><feTurbulence baseFrequency=".68" numOctaves="3" seed="12" result="n"/><feColorMatrix in="n" type="saturate" values="0"/><feComposite in2="SourceGraphic" operator="in"/><feBlend in="SourceGraphic" mode="soft-light"/></filter>
+ <filter id="shadow" x="-30%" y="-40%" width="160%" height="190%"><feDropShadow dx="0" dy="14" stdDeviation="10" flood-color="#160e07" flood-opacity=".6"/></filter>
+ <pattern id="weave" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M0 1H5M1 0V5" stroke="#a3a28a" stroke-opacity=".09"/><path d="M0 3H5M3 0V5" stroke="#090c08" stroke-opacity=".3"/></pattern>
+</defs>
+<!-- Shoulder strap, curved rather than a rigid handle. -->
+<g filter="url(#shadow)"><path d="M72 364C-8 126 108 21 405 28C732 35 1019-4 930 349" fill="none" stroke="#2e2017" stroke-width="39"/><path d="M72 364C-8 126 108 21 405 28C732 35 1019-4 930 349" fill="none" stroke="url(#hide)" stroke-width="31"/><path d="M72 364C-8 126 108 21 405 28C732 35 1019-4 930 349" fill="none" stroke="#c29d6b" stroke-opacity=".6" stroke-width="1.5" stroke-dasharray="3 4"/>
+<path d="M173 168Q152 112 194 93Q490 63 791 101Q828 112 818 179L799 274Q483 304 190 270Z" fill="url(#hide)" stroke="#302218" stroke-width="5"/>
+<path d="M191 166Q172 124 204 112Q486 85 781 118Q807 121 799 174L782 256Q495 280 208 254Z" fill="none" stroke="#c3a071" stroke-opacity=".65" stroke-width="1.5" stroke-dasharray="4 4"/>
+<path d="M122 211Q489 171 878 211L925 322L913 495Q907 552 850 564Q490 585 149 562Q94 550 89 498L75 325Z" fill="url(#hide)" stroke="#2c2018" stroke-width="5"/>
+<path d="M112 251Q144 212 201 215Q481 190 807 216Q863 217 888 253L869 443Q483 469 125 446Z" fill="url(#lining)" stroke="url(#edge)" stroke-width="16"/>
+<path d="M112 251Q144 212 201 215Q481 190 807 216Q863 217 888 253L869 443Q483 469 125 446Z" fill="url(#weave)"/>
+<path d="M120 254Q147 222 201 223Q482 198 807 224Q854 225 880 254" fill="none" stroke="#bea078" stroke-opacity=".55" stroke-width="1.5" stroke-dasharray="4 5"/>
+<!-- Soft inside dividers and slack fabric folds. -->
+<path d="M283 232Q302 322 292 447M453 219Q469 318 453 447M658 224Q677 319 659 447M804 229Q790 340 810 447" fill="none" stroke="#141a13" stroke-width="13"/>
+<path d="M279 233Q298 322 288 447M449 220Q465 318 449 447M654 225Q673 319 655 447M800 229Q786 340 806 447" fill="none" stroke="#61634d" stroke-opacity=".6" stroke-width="3"/>
+<path d="M103 295Q84 397 118 513M891 296Q916 420 879 526" fill="none" stroke="#ad7d50" stroke-opacity=".3" stroke-width="6"/>
+</g>
+<g fill="url(#brass)" stroke="#382719" stroke-width="2"><rect x="66" y="299" width="38" height="65" rx="15"/><rect x="897" y="299" width="38" height="65" rx="15"/></g>
+<g fill="#2d2117"><rect x="74" y="307" width="22" height="48" rx="8"/><rect x="905" y="307" width="22" height="48" rx="8"/></g>
+<g fill="url(#hide)" stroke="#39271c" stroke-width="2"><path d="M74 337L98 337L110 407Q85 420 73 398Z"/><path d="M905 337L930 337L930 398Q915 417 892 405Z"/></g>
+<g fill="url(#brass)"><circle cx="89" cy="387" r="5"/><circle cx="914" cy="386" r="5"/></g>
+<path d="M173 168Q152 112 194 93Q490 63 791 101Q828 112 818 179L799 274Q483 304 190 270Z" fill="#6d4930" opacity=".11" filter="url(#grain)"/>
+</svg>

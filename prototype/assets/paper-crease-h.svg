@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="20" viewBox="0 0 1120 20" preserveAspectRatio="none">
+  <!-- Original T02 artwork, deliberately quieter than the vertical worn spine. -->
+  <defs>
+    <linearGradient id="valley" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#79664a" stop-opacity="0"/>
+      <stop offset=".40" stop-color="#79664a" stop-opacity=".08"/>
+      <stop offset=".51" stop-color="#6b583d" stop-opacity=".13"/>
+      <stop offset=".65" stop-color="#fff9e9" stop-opacity=".25"/>
+      <stop offset="1" stop-color="#fff9e9" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#valley)" d="M0 3 Q38 6 81 3 T162 4 Q205 1 247 4 T328 3 Q371 6 413 3 T494 4 Q537 1 579 4 T660 3 Q703 6 745 3 T826 4 Q869 1 911 4 T992 3 Q1056 6 1120 3 V18 Q1062 15 1004 17 T888 16 Q830 19 772 16 T656 17 Q598 14 540 17 T424 16 Q366 19 308 16 T192 17 Q134 14 76 17 L0 16Z"/>
+  <g fill="none" stroke-linecap="round">
+    <path stroke="#fff9e9" stroke-opacity=".28" stroke-width="1.1" d="M0 10.8l27-.5 24 .4m15-.1 28 .5 31-.7m16 .3 22 .5 36-.6m13 .4 37-.3 21 .4m18-.5 29 .6 24-.4m15 .2 32-.6 26 .5m16-.1 31 .3 23-.5m15 .3 32 .5 28-.7m13 .4 23-.5 32 .6m17-.4 26 .6 29-.5m16 .2 34-.4 23 .3m15 .1 29-.5 26 .4m18-.2 32 .4 30-.5m17 .3 25-.4 28 .5m15-.2 26 .4 24-.6m15 .2 29 .3 27-.4"/>
+    <path stroke="#6d5a3f" stroke-opacity=".10" stroke-width=".7" d="M9 9.3l29 .4m23-.3 22 .5m35-.6 31 .2m28 .1 29-.3m38 .2 19 .3m38-.4 27 .2m42-.3 34 .4m39-.4 23 .5m28-.3 34 .2m35-.4 31 .3m28-.1 24-.3m32 .5 28-.3m41 .2 31-.4m36 .3 27-.1m42 .2 28-.4m39 .3 32-.2"/>
+    <path stroke="#fff9e9" stroke-opacity=".33" stroke-width=".65" d="M32 8l4 5m37-5 3 4m48-4 4 5m51-5 3 4m43-4 5 5m55-5 3 4m46-4 4 5m48-5 4 4m57-4 3 5m49-5 5 4m52-4 4 5m44-5 3 4m51-4 5 5m57-5 3 4m45-4 4 5m52-5 4 4m55-4 3 5m50-5 5 4m47-4 3 5m43-5 4 4"/>
+  </g>
+</svg>

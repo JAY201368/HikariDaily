@@ -1,0 +1,83 @@
+import { openHourDetails } from "./instrument-helpers";
+import { expect, test } from "@playwright/test";
+import { BriefingSchema, WEATHER_UNITS, AIR_UNITS } from "../../src/domain/schemas";
+import { shanghaiIso } from "../../src/domain/time";
+const stamp = (iso: string | null) => iso ? `${shanghaiIso(iso).slice(0, 19).replace("T", " ")} 北京时间` : "未知 / 未提供";
+
+test("T11 artificial conflict and stale-conflict preserve one Briefing across newspaper, instruments and field provenance", async ({ page, request }, info) => {
+  test.skip(process.env.HIKARI_SOURCE_MODE !== "fixture", "Explicit artificial fixture and test-only location preload required");
+  const envelope = await (await request.get("/api/briefing?place=geonames:1796236")).json();
+  const b = BriefingSchema.parse(envelope.data);
+  const hour = b.hours[16];
+  b.location.name = '人工地点 <img src=x onerror="window.__unsafe=1">';
+  b.generatedAt = `${b.localDate}T17:00:00+08:00`;
+  b.sources[0].fetchedAt = `${b.localDate}T15:00:00+08:00`;
+  b.sources[0].issuedAt = null;
+  b.sources[0].validFrom = b.hours[0].start;
+  b.sources[0].validTo = b.hours[23].end;
+  hour.weather.temperature = { value: 21.3, state: "conflict", sourceIds: ["open-meteo-gfs", "met-norway"], notes: ["人工分歧：保留主源21.3°C，备用27°C，禁止平均"], alternatives: [{ sourceId: "met-norway", value: 27 }] };
+  hour.weather.visibility = { value: null, state: "missing", sourceIds: [], notes: ["人工独立缺失：AQI不能补能见度"] };
+  hour.air.referenceAqi.value = 73;
+  b.sunsetOpportunity = { ...b.sunsetOpportunity, status: "assessed", level: 3, label: "一般", confidence: "low", reasons: ["人工日落总云/降水分歧限级样例"], limitations: ["仅基于本地预报条件，未验证西向远方云场与现场遮挡"], sourceIds: ["open-meteo-gfs", "met-norway"] };
+  const external: string[] = [];
+  page.on("request", r => { if (new URL(r.url()).origin !== "http://127.0.0.1:3100") external.push(r.url()); });
+  await page.route("**/api/briefing?*", route => route.fulfill({ json: { data: BriefingSchema.parse(b), error: null } }));
+  await page.goto("/?place=geonames:1796236");
+  await page.getByRole("button", { name: "刷新 / 重试简报" }).click();
+  await expect(page.locator("#newspaper")).toContainText(b.location.name);
+  await expect(page.locator("#newspaper")).toContainText(stamp(b.generatedAt));
+  const row = page.locator("#newspaper tbody tr").filter({ has: page.locator("th", { hasText: /^16$/ }) });
+  await expect(row.locator("td").first()).toHaveText("21.3");
+  await expect(page.locator("#sunset-heading").locator("..").locator("..")).toContainText("3 / 5 级");
+  await expect(page.locator("#newspaper")).not.toContainText(/\d+(?:\.\d+)?\s*%.*(?:概率|成功率)/);
+  await page.getByRole("link", { name: "02 皮包", exact: true }).click();
+  await openHourDetails(page, 16);
+  const reading = page.locator("#hour-16").locator("..");
+  await expect(reading).toContainText("16:00–17:00 · 已过");
+  await reading.locator("summary").click();
+  // Every field's value, unit, source IDs and notes come from this exact document.
+  for (const [group, units] of [[hour.weather, WEATHER_UNITS], [hour.air, AIR_UNITS]] as const) {
+    const offset = group === hour.weather ? 0 : Object.keys(hour.weather).length;
+    for (const [i, [key, metric]] of Object.entries(group).entries()) {
+      const field = reading.locator("dl > div").nth(offset + i);
+      await expect(field).toContainText(metric.value === null ? "暂无数据" : `${metric.value} ${(units as Record<string, string>)[key]}`);
+      for (const source of metric.sourceIds) await expect(field).toContainText(source);
+      for (const note of metric.notes) await expect(field).toContainText(note);
+    }
+  }
+  await expect(reading).toContainText("来源分歧");
+  await expect(reading).toContainText("对比来源 met-norway：27 °C");
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "风温湿仪，打开说明", exact: true }).click();
+  await expect(page.getByRole("dialog")).toContainText("温度 21.3 °C");
+  await expect(page.getByRole("dialog")).toContainText(hour.weather.temperature.notes[0]);
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "气象记录卡，打开说明", exact: true }).click();
+  await expect(page.getByRole("dialog")).toContainText("能见度 暂无 km；参考 AQI 73（US_EPA）");
+  await page.getByRole("dialog").screenshot({ path: info.outputPath("T11-conflict-detail.png") });
+  await page.keyboard.press("Escape");
+  b.state = "stale";
+  b.sources[0].status = "stale";
+  hour.weather.temperature.state = "stale";
+  hour.weather.temperature.notes.push("人工旧缓存与分歧同时存在，旧状态优先但说明保留");
+  await page.getByRole("button", { name: "刷新 / 重试简报" }).click();
+  await expect(page.locator("#newspaper")).toContainText("使用允许范围内的旧数据");
+  await openHourDetails(page, 16);
+  const staleReading = page.locator("#hour-16").locator("..");
+  await staleReading.locator("summary").click();
+  await expect(staleReading).toContainText("旧数据");
+  await expect(staleReading).toContainText("对比来源 met-norway：27 °C");
+  await expect(staleReading).toContainText(hour.weather.temperature.notes[1]);
+  await page.keyboard.press("Escape");
+  await page.locator("#sources-heading").scrollIntoViewIfNeeded();
+  const sources = page.locator("#sources-heading").locator("..");
+  await expect(sources).toContainText(stamp(b.sources[0].fetchedAt));
+  await expect(sources).toContainText("发布：未知 / 未提供");
+  await expect(sources).toContainText(stamp(b.sources[0].validFrom));
+  await expect(sources).toContainText(stamp(b.sources[0].validTo));
+  await page.screenshot({ path: info.outputPath("T11-stale-source.png") });
+  expect(await page.evaluate(() => "__unsafe" in window)).toBe(false);
+  expect(await page.locator("article img[src=x]").count()).toBe(0);
+  expect(external).toEqual([]);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});

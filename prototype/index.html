@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#e7dfcf">
+  <title>逐光日刊 · HikariDaily 离线视觉原型</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="solar.js" defer></script><script src="data.js" defer></script><script src="app.js" defer></script>
+</head>
+<body class="static">
+<a class="skip" href="#newspaper">跳到日报内容</a>
+<header class="site-header">
+  <a class="brand" href="#newspaper" data-nav="paper">逐光<span>HIKARI DAILY</span></a>
+  <div class="fixture-label">上海 · 2026.10.21 <b>固定演示</b></div>
+  <nav aria-label="章节"><a href="#newspaper" data-nav="paper">01 日报</a><a href="#instruments" data-nav="bag">02 皮包</a><a href="#handbook" data-nav="book">03 手册</a><a href="#subscribe" data-nav="subscribe">04 订阅单</a></nav>
+  <button id="motion-toggle" type="button" aria-pressed="true">静态阅读</button>
+</header>
+<main>
+  <div id="mobile-paper-home"></div>
+  <div class="journey" id="journey">
+    <div class="stage" id="stage">
+      <div class="world" id="world">
+        <div id="paper-object" class="paper-object">
+          <article class="newspaper" id="newspaper" tabindex="-1" aria-label="逐光日刊，当天概览">
+            <div class="masthead">
+              <div class="ear">摄影天气专刊<br><strong>上海</strong><span>城市参考点 · 非现场实测</span></div>
+              <div class="mast-title"><h1>逐光日刊</h1><p>THE HIKARI DAILY · 读天空，再出发</p></div>
+              <div class="ear right">傍晚的片刻<strong data-event="sunset">17:17</strong><span>日落 · 北京时间</span></div>
+            </div>
+            <div class="dateline"><span>2026 年 10 月 21 日 · 星期三</span><span>样例更新 15:20 · Asia/Shanghai</span><b>第 001 号 / 离线设计样刊</b></div>
+            <header class="headline"><p class="eyebrow">今日提要 / 云隙、侧光与晚归的理由</p><h2>午后云隙见光，傍晚值得留一会儿</h2><p>中高云为霞色留下一种可能；低云与西侧遮挡，仍需到现场再看。</p></header>
+            <div class="news-grid">
+              <section class="story-column">
+                <figure class="news-photo"><img src="assets/riverside-film.webp" alt="江岸城市与云层的黑白氛围参考"><figcaption>上海江岸 · 氛围参考图，非当日实况或预测画面</figcaption></figure>
+                <div class="sunset-row"><div><span class="eyebrow">日落窗口 · 本地条件推断</span><strong class="opportunity">4 / 5 · 较高</strong></div><button class="text-button" data-detail="sunset" type="button">读懂五级 ↗</button></div>
+                <p class="sunset-reason">日落小时低云 50%、中云 50%、高云 20%；能见度 15 km，小时降水 0 mm。</p>
+                <p class="note">仅看本地预报条件；未验证西向远方云场与现场遮挡。高等级不是必见保证。</p>
+              </section>
+              <section class="weather-column"><h3 class="column-title">天气与出发</h3><div class="daily-temp">14<span>—</span>22<small>°C</small></div><p class="weather-name">晴转多云</p><p>午后风约 3—4 m/s。样例无雨，出发前仍需复核。</p><h3 class="column-title second">三种拍法</h3><dl class="genre-summary"><dt>风光 <span data-event="eveningGold">16:44—17:32</span></dt><dd>等低角度光与云层。</dd><dt>人像 <span>15:30—16:30</span></dt><dd>先柔光，后侧逆光。</dd><dt>街拍 <span>14:00—16:00</span></dt><dd>找变化光的明暗边界。</dd></dl><button type="button" class="text-button" data-nav="book">翻开当天手册 →</button></section>
+              <section class="hour-column"><h3 class="column-title">逐时摘录</h3><table class="hour-table"><thead><tr><th>时</th><th>°C</th><th>云%</th><th>雨mm</th></tr></thead><tbody id="news-hours"></tbody></table><p class="note">24 小时见明细。降水按小时段累计。</p><button class="text-button" type="button" data-detail="hours">完整逐时表 ↗</button></section>
+              <section class="almanac-column"><h3 class="column-title">天文历</h3><dl class="almanac"><dt>日出 / 日落</dt><dd data-event="riseSet">06:01 / 17:17</dd><dt>早蓝调 <small>已过*</small></dt><dd data-event="morningBlue">05:36—05:46</dd><dt>早金调 <small>已过*</small></dt><dd data-event="morningGold">05:46—06:34</dd><dt>晚金调</dt><dd data-event="eveningGold">16:44—17:32</dd><dt>晚蓝调</dt><dd data-event="eveningBlue">17:32—17:42</dd></dl><p class="note">* 相对样例 15:20。时段不保证可见光效。</p><h3 class="column-title second">空气 ≠ 能见度</h3><div class="air-summary"><strong>58</strong><span>参考 AQI<br>美国 EPA 口径</span></div><p class="note">16 时样例：PM2.5 15 μg/m³；能见度 18 km。CAMS 模型小时序列口径（含插值），非中国官方 AQI。</p></section>
+            </div>
+            <footer class="paper-footer"><span>天气：预报夹具 / 太阳：本地天文计算 / 摄影：规则解释</span><button type="button" class="text-button" data-detail="sources">数据与出处 ↗</button><button type="button" class="text-button" data-nav="bag">折好日报，打开皮包 ↓</button></footer>
+          </article>
+          <div id="folding" class="folding" aria-hidden="true" inert></div>
+        </div>
+        <section class="bag-scene" id="instruments" tabindex="-1" aria-label="随身仪表">
+          <header class="scene-title"><div><span class="eyebrow">02 / 随身气象</span><h2>把天气带在身边。</h2></div><p><b class="selected-time">16:00</b> · 模型预报演示<br><span>点一件器材，读懂一个条件。</span></p></header>
+          <div class="bag-art bag-back" aria-hidden="true"></div>
+          <div class="devices">
+            <button class="device wind-device" type="button" data-device="wind" data-model="HF-96" data-maker="HIKARI FIELD" data-owner="H.K."><img src="assets/wind-photo-v3.png" alt=""><span class="lcd wind-lcd"><small>平均风 · m/s</small><strong data-value="wind">3.4</strong><span>阵风 <b data-value="gust">6.2</b> m/s</span><span><b data-value="temperature">20</b>°C / <b data-value="humidity">65</b>%</span></span></button>
+            <button class="device direction-device" type="button" data-device="direction" data-model="SD-21" data-maker="HIKARI FIELD" data-owner="H.K."><img src="assets/solar-direction-v1.png" alt=""><span class="sun-dial" aria-hidden="true"><i class="north">N</i><i class="east">E</i><i class="south">S</i><i class="west">W</i><span class="sun-hand"></span><small>计算太阳</small></span><span class="lcd direction-lcd"><span>方位 <b data-value="azimuth"></b>°</span><span>高度 <b data-value="altitude"></b>°</span></span></button>
+            <button class="device light-device" type="button" data-device="light" data-model="LM-21" data-maker="HIKARI FIELD" data-owner="H.K."><img src="assets/light-meter-v2.png" alt=""><span class="lcd light-lcd"><strong data-value="light"></strong><span data-value="stage"></span><small>预报解释 · 非现场测光</small></span></button>
+            <button class="device weather-card" type="button" data-device="weather" data-model="WC-21" data-maker="逐光记录" data-owner="H.K."><span class="card-heading">气象记录 <small>SHANGHAI / 10.21</small></span><span class="card-hour"><b class="selected-time">16:00</b> 北京时间 · 固定样例</span><span class="lcd card-grid"><span>总云量 <b><em data-value="cloud"></em> %</b></span><span>小时降水 <b><em data-value="rain"></em> mm</b></span><span>能见度 <b><em data-value="visibility"></em> km</b></span><span>参考 AQI <b data-value="aqi"></b></span><span>PM2.5 <b><em data-value="pm25"></em> μg/m³</b></span><span>PM10 <b><em data-value="pm10"></em> μg/m³</b></span></span><span class="card-source">天气预报样例 · AQI: US EPA / CAMS<br>模型小时序列口径 / 15:20 更新</span></button>
+          </div>
+          <div class="bag-art bag-mid" aria-hidden="true"></div>
+          <div class="pocket-watch">
+              <div class="watch-case">
+                <div id="hour-dial" class="hour-dial" role="slider" tabindex="0" aria-label="拨针选择样例小时，北京时间" aria-describedby="watch-help" aria-valuemin="0" aria-valuemax="23" aria-valuenow="16" aria-valuetext="16:00，北京时间，固定演示">
+                  <svg class="dial-marks" viewBox="0 0 240 240" aria-hidden="true"></svg>
+                  <span class="watch-maker" aria-hidden="true">HIKARI FIELD<span>24 H / 021</span></span>
+                  <span class="watch-hand" aria-hidden="true"></span><span class="watch-pivot" aria-hidden="true"></span>
+                  <span class="watch-time selected-time" aria-hidden="true">16:00</span>
+                </div>
+              </div>
+              <div class="watch-actions"><button id="prev-hour" type="button" aria-label="上一小时">−1 时</button><span id="watch-help">拨针选时 · 24h</span><button id="next-hour" type="button" aria-label="下一小时">+1 时</button></div>
+              <button type="button" class="text-button hour-details" data-detail="hours">24 小时明细 ↗</button>
+            </div>
+          <div class="bag-controls">
+            <div class="reading-index" aria-live="polite"><p id="weather-index"></p><p id="condition-index"></p><p id="solar-index"></p><p id="light-index"></p><p id="hour-note"></p></div>
+            <div class="state-line"><label for="data-state">夹具状态</label><select id="data-state"><option value="ok">完整样例</option><option value="missing">缺失演示</option><option value="stale">旧数据演示</option><option value="conflict">来源分歧演示</option></select><span id="state-note">固定样例 15:20 更新；无真实请求。</span></div>
+          </div>
+        </section>
+        <div class="bag-art bag-front" id="bag-front" aria-hidden="true"></div>
+        <section class="handbook" id="handbook" tabindex="-1" aria-label="当天摄影手册">
+          <div class="book-block" id="book-block"><div class="spreads" id="spreads"></div><div class="turn-leaf" id="turn-leaf" aria-hidden="true" inert><div class="leaf-front"></div><div class="leaf-back"></div></div></div>
+          <div class="book-cover" id="book-cover" aria-hidden="true"><div class="cover-front"><p>逐光 · 随身丛书　01</p><h2>外拍<br>手册</h2><div class="cover-band">读懂天气<br>把判断带到现场</div><svg viewBox="0 0 300 110"><path d="M15 88H285M48 88V57H83V88M102 88V25H131V88M155 88V45H185V88M208 88V12H233V88" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="75" cy="23" r="14" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15 98H285" stroke="currentColor" stroke-width="1"/></svg><footer>风光 / 人像 / 街拍<br>上海 · 2026.10.21</footer></div><div class="cover-back"><span>逐光 · 外拍手册</span><h2>先读天空，<br>再按快门。</h2><p>今日建议，现场判断。<br>三种题材，同一份天气。</p></div></div>
+        </section>
+        <div class="book-nav" id="book-nav" aria-label="手册翻页"><button type="button" id="prev-page" aria-label="上一题材">←</button><button type="button" data-genre="0">01 风光</button><button type="button" data-genre="1">02 人像</button><button type="button" data-genre="2">03 街拍</button><button type="button" id="next-page" aria-label="下一题材">→</button></div>
+      </div>
+      <div class="scroll-caption" id="scroll-caption" aria-hidden="true">往下滚动 · 折好日报 <span>↓</span></div>
+    </div>
+  </div>
+  <section class="subscribe-section" id="subscribe" tabindex="-1" aria-labelledby="subscribe-title"><div class="intro-home"><div class="subscribe-intro"><span class="eyebrow">04 / 把下一份天气留给明天</span><h2 id="subscribe-title">一份简报，<br>一个出发的理由。</h2><p>未来可通过微信订阅号接收地点摘要与网页入口。<br>这里先留一张纸上预览，不会发送消息。</p></div></div><div class="slip-home" id="slip-home"><form class="subscription" id="subscription"><header><span>逐 光 日 刊 · 订 阅 单</span><small>界面预览 / 非正式登记</small></header><div class="form-row"><span>报刊名称</span><p>逐光日刊 · 摄影天气简报</p></div><div class="form-row"><label for="place">关注地点</label><div><input id="place" name="place" value="上海" required maxlength="40" autocomplete="off"><small>仅预览文字，不查询或保存地点。</small></div></div><fieldset class="form-row"><legend>投递时段</legend><div><label><input type="radio" name="slot" value="07:00" checked> 晨刊 07:00</label><label><input type="radio" name="slot" value="12:00"> 午刊 12:00</label><small>北京时间 · Asia/Shanghai</small></div></fieldset><div class="form-row"><span>未来渠道</span><p>微信订阅号 / 摘要 + 对应地点网页入口</p></div><div class="form-bottom"><p>不收集微信身份，不创建订阅。<br>本地关闭页面后，预览即结束。</p><button type="submit" class="ink-button">预览订阅单 ↗</button></div><div class="registration" id="registration" hidden aria-live="polite"><strong class="stamp">演示登记</strong><p id="registration-text"></p><p>未创建订阅，不会发送消息。</p><button type="button" id="edit-preview">调整预览</button><button type="button" id="stop-preview">停止预览</button></div><p id="subscription-status" role="status"></p></form></div></section>
+</main>
+<footer class="site-footer"><span>逐光日刊 / HikariDaily</span><span>本地视觉样刊 · 非实时天气 · 素材仅供评审</span><button class="text-button" type="button" data-detail="sources">数据与素材说明 ↗</button></footer>
+<dialog id="detail" aria-labelledby="detail-title"><div class="dialog-top"><span>逐光 · 读数说明</span><button type="button" id="close-detail" aria-label="关闭说明">×</button></div><div id="detail-body"></div></dialog>
+<noscript><p class="noscript">脚本未启用：可阅读报纸及订阅预览版式；小时切换、器材说明和动态手册需要本地 JavaScript。页面不发送请求。</p></noscript>
+</body>
+</html>

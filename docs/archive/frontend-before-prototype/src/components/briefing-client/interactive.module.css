@@ -1,0 +1,21 @@
+.picker, .empty, .refresh, .error { padding: 1.5rem 0; border-bottom: 1px solid #aaa28f; overflow-wrap: anywhere; }
+.picker h2, .empty h2, .error h2 { font-size: 1.3rem; margin-bottom: 0.7rem; }
+.picker label, .picker input { display: block; width: 100%; }
+.picker input { min-height: 44px; font: inherit; color: inherit; border: 1px solid #796f58; padding: 0.5rem; background: #fffcf3; border-radius: 0; }
+.picker button, .refresh button { min-height: 44px; font: inherit; color: inherit; cursor: pointer; background: #fffcf3; border: 1px solid #796f58; padding: 0.5rem 0.75rem; }
+.picker :focus-visible, .refresh :focus-visible, .error :focus-visible { outline: 3px solid #796423; outline-offset: 3px; }
+.results { list-style: none; padding: 0; }
+.results li + li { margin-top: 0.6rem; }
+.results button { width: 100%; text-align: left; overflow-wrap: anywhere; }
+.results span { display: block; font-size: 0.9rem; }
+.hint { font-size: 0.85rem; }
+.error { border: 2px solid #7e422d; padding: 1rem; margin: 1rem 0; }
+.hourControls button, .genreNav button { min-width: 44px; min-height: 44px; font: inherit; color: inherit; border: 1px solid #796f58; background: #fffcf3; cursor: pointer; padding: 0.35rem 0.6rem; }
+.hourStrip { display: grid; grid-template-columns: repeat(auto-fit, minmax(44px, 1fr)); gap: 0.3rem; margin: 0.75rem 0; }
+.hourStrip button[aria-pressed="true"], .genreNav button[aria-pressed="true"] { background: #51462c; color: #fffaf0; font-weight: bold; }
+.stepHours, .genreNav { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0.7rem 0; }
+/* Search remains available in the header without displacing the newspaper. */
+.toolbar{position:fixed;left:230px;top:10px;z-index:110;display:flex;align-items:start;gap:12px;font:12px/1.6 'PingFang SC','Microsoft YaHei',sans-serif}.toolbar .picker{position:relative;width:250px;padding:0;border:0}.toolbar .picker h2,.toolbar .picker label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.toolbar .picker input{height:44px;min-height:44px;background:#f5f0e4b3;border:1px solid #96897166;padding:7px 12px;font-size:12px}.toolbar .picker>p{display:none}.toolbar .picker:focus-within>p{display:block;background:#eee6d4;padding:8px 12px;margin:0;box-shadow:0 4px 8px #30251720;font-size:11px}.toolbar .results{position:absolute;top:100%;left:0;right:0;margin:0;max-height:55svh;overflow:auto;background:#f5eedf;box-shadow:0 8px 20px #30251740;border:1px solid #a89978;padding:8px}.toolbar .results button{font-size:13px}.toolbar .results span{font-size:11px}.toolbar .refresh{border:0;padding:0}.toolbar .refresh button{height:44px;font-size:11px;background:transparent;border:0;text-decoration:underline;text-underline-offset:4px;color:#813d2a;padding:5px}.toolbar .refresh p{position:absolute;top:100%;left:0;width:350px;font-size:10px;background:#ede7da;padding:2px 8px;opacity:0;pointer-events:none}.toolbar .refresh:focus-within p,.toolbar .refresh:has(button:disabled) p{opacity:1}.empty{max-width:650px;margin:80px auto;padding:35px;border:1px solid #b3a78c;background:#eee6d4}
+@media(max-width:70rem) and (min-width:48.001rem){.toolbar{left:195px}.toolbar .picker{width:200px}.toolbar .refresh button{font-size:0}.toolbar .refresh button:after{content:'刷新';font-size:11px}}
+@media(max-width:48rem){.toolbar{left:94px;right:16px;top:8px;gap:8px}.toolbar .picker{width:auto;flex:1;min-width:0}.toolbar .picker input{font-size:12px}.toolbar .refresh{position:fixed;left:16px;top:60px}.toolbar .refresh button{font-size:10px;padding:0}.toolbar .refresh p{width:calc(100vw - 32px);top:44px}.toolbar .results{max-height:45svh}.empty{margin:40px auto;padding:24px}.hourStrip{display:flex;overflow-x:auto;padding-bottom:6px}.hourStrip button{flex:0 0 44px}}
+@media(max-width:48rem){.toolbar .refresh button{font-size:0;min-width:44px}.toolbar .refresh button:after{content:'刷新';font-size:11px}}

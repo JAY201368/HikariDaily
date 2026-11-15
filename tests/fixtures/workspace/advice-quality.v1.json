@@ -1,0 +1,36 @@
+{
+  "version": "quality-2026-10-v1",
+  "provenance": "原创合成对抗例；不是天气观测或真实模型验收",
+  "cases": [
+    {"id":"sunny-direct", "scene":"sunny", "text":"用侧光突出建筑表面的体积。", "allowed":true},
+    {"id":"overcast-direct", "scene":"overcast", "text":"用侧光突出建筑表面的体积。", "allowed":false},
+    {"id":"overcast-diffuse", "scene":"overcast", "text":"用散射光整理人物面部明暗。", "allowed":true},
+    {"id":"rain-conditional", "scene":"rain", "text":"路面有积水时，降低机位收进倒影。", "allowed":true},
+    {"id":"rain-not-observation", "scene":"rain", "text":"路面已经湿润，降低机位拍倒影。", "allowed":false},
+    {"id":"null-conditional", "scene":"null", "text":"如果下雨，转到室内拍窗框纹理。", "allowed":true},
+    {"id":"technique", "scene":"null", "text":"用快门控制动作模糊，调整光圈整理背景。", "allowed":true},
+    {"id":"night", "scene":"night", "text":"夜间用橱窗灯光突出人物轮廓。", "allowed":true},
+    {"id":"day-night", "scene":"sunny", "text":"夜间用橱窗灯光突出人物轮廓。", "allowed":false},
+    {"id":"stale", "scene":"stale", "text":"用直射光组织明暗边界。", "allowed":false},
+    {"id":"conflict", "scene":"conflict", "text":"用散射光组织面部明暗。", "allowed":false},
+    {"id":"null-light", "scene":"null", "text":"用直射光组织明暗边界。", "allowed":false},
+    {"id":"risk", "scene":"risk", "text":"去河岸取景拍建筑轮廓。", "allowed":false},
+    {"id":"risk-indoor", "scene":"risk", "text":"在室内拍窗框与墙面纹理。", "allowed":true},
+    {"id":"poor-visibility", "scene":"poor-visibility", "text":"远景清晰，拍远山轮廓。", "allowed":false},
+    {"id":"night-sunset", "scene":"night", "text":"用夕阳勾勒人物轮廓。", "allowed":false},
+    {"id":"fake-time", "scene":"sunny", "text":"下午三点去拍建筑轮廓。", "allowed":false},
+    {"id":"fake-value", "scene":"sunny", "text":"使用快门速度1/500秒拍动作。", "allowed":false},
+    {"id":"fake-grade", "scene":"sunny", "text":"晚霞五级，适合出发。", "allowed":false},
+    {"id":"disclaimer", "scene":"sunny", "text":"用近景组织层次，实际效果仍需现场判断。", "allowed":false},
+    {"id":"disclaimer-synonym", "scene":"sunny", "text":"拍摄结果取决于现场条件，请自行确认。", "allowed":false},
+    {"id":"disclaimer-low-expectation", "scene":"sunny", "text":"可以拍建筑，但不要抱太大期待。", "allowed":false},
+    {"id":"unicode-evasion", "scene":"sunny", "text":"使用快门１／５００秒拍动作。", "allowed":false}
+  ],
+  "recall": [
+    {"scene":"sunny", "genre":"landscape", "query":"直射 体积", "include":"landscape-direct", "exclude":"landscape-night"},
+    {"scene":"overcast", "genre":"portrait", "query":"柔光 面部", "include":"portrait-light", "exclude":"portrait-direct"},
+    {"scene":"night", "genre":"street", "query":"夜间 招牌", "include":"street-night", "exclude":"street-direct"},
+    {"scene":"null", "genre":"landscape", "query":"构图 引导线", "include":"landscape-composition", "exclude":"landscape-direct"},
+    {"scene":"risk", "genre":"portrait", "query":"替代 室内", "include":"portrait-alternative", "exclude":"portrait-subject"}
+  ]
+}

@@ -1,0 +1,16 @@
+.briefing { overflow-wrap: anywhere; }
+.briefing section { margin: 2rem 0; }
+.briefing h2 { font-size: 1.5rem; border-bottom: 1px solid #aaa28f; padding-bottom: 0.5rem; }
+.briefing h3 { font-size: 1.15rem; margin: 1rem 0 0.5rem; }
+.briefing h4 { margin-bottom: 0.3rem; }
+.briefing p + p { margin-top: 0.5rem; }
+.briefing a { color: #594017; text-underline-offset: 0.2em; }
+.briefing ul { padding-left: 1.4rem; }
+.briefing li + li { margin-top: 0.4rem; }
+.briefing dl { margin: 0.7rem 0; }
+.briefing dd { margin-left: 1rem; }
+.briefing summary { cursor: pointer; padding: 0.6rem 0; text-decoration: underline; text-underline-offset: 0.2em; }
+.briefing :focus-visible { outline: 3px solid #796423; outline-offset: 3px; }
+.metric { padding: 0.6rem 0; border-bottom: 1px dotted #aaa28f; }
+.hour { padding-bottom: 1rem; border-bottom: 1px solid #c8c0ae; }
+.notice { border: 2px solid #7e422d; padding: 1rem; font-weight: bold; background: #fff6d7; }

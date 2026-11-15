@@ -1,0 +1,52 @@
+{
+  "name": "hikari-daily",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@11.26.0",
+  "engines": {
+    "node": ">=24.3.0 <25",
+    "pnpm": "11.26.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "typecheck": "next typegen && tsc --noEmit",
+    "lint": "eslint . --max-warnings=0",
+    "test": "vitest run",
+    "test:workspace": "node scripts/test-workspace.mjs",
+    "test:e2e": "playwright test",
+    "build": "next build",
+    "start": "next start",
+    "workspace:migrate": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --conditions=react-server --import tsx scripts/workspace-migrate.ts",
+    "workspace:knowledge": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --conditions=react-server --import tsx scripts/workspace-knowledge.ts"
+  },
+  "dependencies": {
+    "@langchain/core": "1.3.0",
+    "@langchain/langgraph": "1.5.3",
+    "@vercel/functions": "3.10.3",
+    "motion": "14.6.0",
+    "next": "16.4.2",
+    "pg": "8.23.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "server-only": "0.0.1",
+    "sharp": "0.35.5",
+    "suncalc": "1.9.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "@types/node": "24.19.2",
+    "@types/pg": "8.23.1",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/suncalc": "1.9.2",
+    "eslint": "9.39.4",
+    "eslint-config-next": "16.4.2",
+    "fake-indexeddb": "6.2.8",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "vite": "8.3.5",
+    "vitest": "5.0.5"
+  },
+  "type": "module"
+}
