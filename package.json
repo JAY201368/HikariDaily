@@ -15,6 +15,7 @@
     "test:workspace": "node scripts/test-workspace.mjs",
     "test:e2e": "playwright test",
     "build": "next build",
+    "build:showcase": "node scripts/build-showcase.mjs",
     "start": "next start",
     "workspace:migrate": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --conditions=react-server --import tsx scripts/workspace-migrate.ts",
     "workspace:knowledge": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --conditions=react-server --import tsx scripts/workspace-knowledge.ts"

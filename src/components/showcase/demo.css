@@ -1,0 +1,12 @@
+html:has(.showcase-demo) { scrollbar-width: none; }
+.showcase-demo { background-color: #d8d2c5; }
+.showcase-demo::-webkit-scrollbar { display: none; }
+.showcase-demo .site-footer,
+.showcase-demo .subscribe-intro { display: none; }
+.showcase-demo .scroll-caption { display: none; }
+.showcase-demo #peer-reader:focus { outline: none; }
+.demo-planner-inline { padding-top: 52px; min-height: 1000px; background: #e6e3d9; }
+.demo-planner-inline .demo-planner-status { color: #686d5e; }
+.demo-planner-status { font: 12px/1.6 var(--sans); text-align: center; margin: 12px 0; color: #f5ecd7; }
+.showcase-demo .shooting-reader-host { min-height: 1px; }
+.showcase-demo .shooting-reader-host:not([data-ready="true"]) { visibility: hidden; }

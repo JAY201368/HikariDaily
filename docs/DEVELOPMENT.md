@@ -68,6 +68,12 @@ Open-Meteo免费托管API无需密钥，但仅限非商业用途，当前条款�
 
 原型单独离线运行的方法见 [prototype/README](../prototype/README.md)。微信订阅与发送仍未接通；账户与模型配置服务当前 AI 摄影建议。
 
+## 产品展示
+
+运行开发服务后访问 `/showcase`。页面的独立展示视图位于 `/showcase/demo`，共用正式物件 runtime 与计划本编辑器，使用 `src/content/showcase/` 的固定人工样例。展示过程读取本地素材，计划编辑与上传图片保留在页面内存中，刷新后恢复。README 与页面载入图位于 `public/showcase/`。更新界面后需要同步使用当前演示视图采集的画面。
+
+`pnpm build:showcase` 将同一展示组件构建到 `out/showcase/`，可用于 GitHub Pages。默认公开路径为 `/HikariDaily/`，可用 `SHOWCASE_BASE_PATH` 指定以斜线起止的目录。构建时为资源路径添加目录前缀，保留正式应用的根路径。线上展示的源码与本地运行入口指向 GitHub 仓库。`main` 更新后由 `.github/workflows/showcase-pages.yml` 构建并部署。
+
 ## 账户、模型与公共摄影知识
 
 账户及 AI 建议使用 PostgreSQL15+。在本机私有环境中配置 `HIKARI_DATABASE_URL`、`HIKARI_CREDENTIAL_KEYS` 和 `HIKARI_APP_ORIGIN`。密钥环为 key-id 到 base64 编码32字节密钥的 JSON 对象，首项用于新加密，旧项用于解密历史凭证。

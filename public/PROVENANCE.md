@@ -25,3 +25,9 @@
 最终生成提示词（内置工具，非CLI）：
 
 > Create a production texture image for an original vintage photography field-guide front cover, portrait aspect 460:610. Reference inspiration: 1970s professional photography pocket manuals, dark desaturated navy blue pebbled cloth-coated card, subtle edge wear, warm ivory print, burnt orange and golden yellow camera aperture motif. This is a FLAT full-bleed cover artwork texture, straight orthographic face-on, rectangular fills entire image, no external background, no perspective, no cast shadow, no book/page edges. Top 38 percent entirely blank navy textured area for live HTML title overlay. Lower middle: large beautiful cream circular ring with six swirling orange and golden yellow aperture blades and navy outlines, printed aged ink, center near x50% y66%, circle diameter 70% width. Bottom 8 percent blank navy. Fine tactile worn paper grain, subtle rubbed edges, tasteful authentic printed imperfections, high detail, not cartoon. NO WORDS, NO LETTERS, NO logos, NO Kodak brand, no watermark. The texture will be mapped onto a 3D CSS book cover. Generate a single image.
+
+## 产品展示素材
+
+`showcase/` 中的 WebP 截图和 `folding.gif` 于2026-11-16从本仓库 `/showcase/demo` 的实际桌面界面采集，沿用上述物件、纹理、江岸照片及正式胶片插图的来源记录。截图经过尺寸与格式压缩。
+
+天气画面使用 `src/content/showcase/briefing.json` 固定人工样例，由正式简报服务结合显式合成来源生成，日期为2026-11-16。`src/content/showcase/notebook.ts` 保存原创示例计划文字，参考图沿用 `textures/riverside-film.webp`。展示页直接复用正式界面的报纸、仪表、手册与计划本编辑器，演示编辑仅保留在页面会话中。

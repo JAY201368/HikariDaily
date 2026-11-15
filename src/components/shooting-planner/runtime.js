@@ -565,7 +565,7 @@ export function mountPlanner(root, options) {
     const old = byId('spread').children[direction > 0 ? 1 : 0]?.cloneNode(true);
     change();
     render();
-    if (old && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (old && !(options.reducedMotion?.() ?? matchMedia('(prefers-reduced-motion: reduce)').matches)) {
       const leaf = document.createElement('div');
       leaf.className = `turning-leaf${direction < 0 ? ' backward' : ''}`;
       const front = document.createElement('div');

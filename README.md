@@ -1,57 +1,105 @@
-# 逐光日刊 · HikariDaily
+<div align="center">
 
-为摄影师准备的当天气象简报，以老报纸、皮革摄影背包、随身仪表和摄影手册讲述天气与光线。
+# 逐光日刊
 
-核心网页已实现地点查询、当天24小时、多源数据处理、太阳计算、三题材摄影建议和连续物件交互。当前规则为 `photo-rules-v0.3`，后端已使用 LangGraph，公共天气事实仍由确定性规则生成，私有AI叙述在主图之外增强；网站尚未部署，微信订阅仍属第二阶段。未完成事项见 [CURRENT](docs/CURRENT.md)，实际行为以当前代码和测试为准。
+**HikariDaily**
 
-AI 摄影建议使用账户模型配置和公共 RAG 知识，增强报纸与摄影手册。真实用户模型质量、目标持久环境及大陆访问仍待验收。见[当前状态](docs/CURRENT.md)与[规格第13节](spec.md#13-ai-摄影建议契约)。
+摄影天气日报 · 随身仪表 · 外拍手册 · 拍摄计划本
+
+[交互展示](https://jay201368.github.io/HikariDaily/) · [本地运行](#本地运行) · [开发文档](docs/DEVELOPMENT.md)
+
+</div>
+
+![逐光日刊的报纸界面，展示天气、一天的变化、三种题材的拍摄时段与晚霞判断](public/showcase/journey.webp)
+
+选择地点，阅读当天的天气与光线。逐光将 24 小时预报、太阳位置、拍摄建议和出发计划放进一份报纸、一个摄影包与两本随身书。
+
+## 从报纸到背包
+
+向下滚动，报纸沿两道折痕收起，落入摄影包。拨动 24 小时表盘，包里的仪表随之更新。点击器材，查看对应小时的读数、趋势和解释。
+
+![报纸连续折叠、对准袋口并收入背包的实际运行画面](public/showcase/folding.gif)
+
+| 物件 | 可以查看的内容 |
+| --- | --- |
+| 摄影天气日报 | 当天概览、气温变化、天色时间轴、三题材拍摄时段、日出日落与晚霞 |
+| 叶轮风温湿仪 | 平均风、阵风、温度、湿度及逐时变化 |
+| 太阳方位仪 | 所选小时的太阳方位与高度 |
+| 测光表意象 | 光线软硬、明暗与适合的拍摄方式 |
+| 气象记录卡 | 云量、降水、能见度、空气质量与颗粒物 |
+| 24 小时表盘 | 拨针、键盘或前后小时按钮选时，联动所有仪表 |
+
+日报与仪表都能继续打开逐时明细、晚霞解释和数据出处。预报、天文计算、摄影推断分别标识，来源时间与缺失状态随内容保留。
+
+## 翻开外拍手册
+
+深蓝封皮从背包中提起，在书脊处展开。风光、人像、街拍各占一个对开，纸页按原有方向翻动。时段、用光、主体、构图和胶片建议集中在书页中，完整建议可继续展开阅读。
+
+![外拍手册的双页布局、用光示意与胶片建议](public/showcase/handbook.webp)
+
+连接自己的模型后，天气事实与摄影知识共同参与生成报纸和手册里的建议。账户设置支持兼容模型服务地址、模型名称、API Key 与能力检测。默认提供规则建议，生成状态和知识依据可查看。
+
+## 写进拍摄计划本
+
+浅米白纸页、锁线书脊和外伸便签组成另一册手账。打开目录，进入一份计划，在对应位置直接编辑文字。
+
+![拍摄计划本中的想法、日期地点与日程安排](public/showcase/planner-writing.webp)
+
+- **安排拍摄** — 记录地点、日期、题材、想法、日程和准备清单。
+- **整理参考** — 贴入图片，添加说明，用画笔、箭头、文字或框选做批注，支持裁剪与旋转。
+- **连续书写** — 长文自动续页，支持手动分页、资料页、缩略图和栏目跳转。
+- **管理计划** — 搜索文字与批注，复制计划，移入回收夹或恢复。
+- **保存与同步** — 未登录时保存在本机，登录后可显式导入并开启账户同步。
+
+![计划本中的准备清单、参考照片与可编辑批注](public/showcase/planner-reference.webp)
+
+## 交互展示
+
+直接打开 **[在线交互展示](https://jay201368.github.io/HikariDaily/)**，也可在本地启动项目后访问 `/showcase`。
+
+展示页沿用正式产品的物件素材、折报动作、仪表、手册翻页和计划本编辑器。可滚动收报、取用器材、拨针选时、翻阅三种题材，并编辑「江边的午后」示例计划。
+
+页面与本文画面使用标注清楚的人工天气和计划样例。展示中的编辑保留在本次页面会话，刷新恢复初始内容。展示页支持减少动态、键盘操作与章节直达，面向桌面浏览。
 
 ## 本地运行
 
-要求 Node.js `>=24.3.0 <25`（`.nvmrc` 为 24.3.0）、pnpm `11.26.0`。
+需要 Node.js `>=24.3.0 <25` 与 pnpm `11.26.0`。
 
 ```sh
 pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-打开 `http://localhost:3000`，按 Ctrl-C 停止。默认获取真实来源；共享缓存默认关闭，MET 缺少真实身份或可用共享缓存时禁用。live 失败不会切换为人工天气。配置、检查命令和显式演示模式见 [开发说明](docs/DEVELOPMENT.md)。
+- [打开应用](http://localhost:3000) — 选择中国大陆城市或区域，加载当天简报。
+- [打开展示页](http://localhost:3000/showcase) — 使用固定样例体验界面与交互。
 
-账户与 AI 摄影建议需要 PostgreSQL15+。准备私有环境后运行 `pnpm workspace:migrate` 和知识导入，在主页顶栏注册并配置模型。操作说明见[开发说明](docs/DEVELOPMENT.md)，隔离数据库验证使用 `pnpm test:workspace`。
+核心天气页面可直接启动。账户、模型配置与账户计划同步使用 PostgreSQL 15+，环境配置参考 [.env.example](.env.example)。准备数据库与服务端配置后执行以下命令。
 
-## 按需查阅
-
-从当前任务和相关代码开始，不必逐份阅读下表。
-
-| 需要了解 | 文档 |
-| --- | --- |
-| 产品目标、范围和交付顺序 | [requirement.md](requirement.md) |
-| AI 摄影建议与账户模型配置 | [spec.md 第13节](spec.md#13-ai-摄影建议契约) |
-| 数据、时间、接口和摄影规则的详细契约 | [spec.md](spec.md) |
-| 当前模块职责与数据流 | [ARCHITECTURE](docs/ARCHITECTURE.md) |
-| 当前目标、未完成事项与已知限制 | [CURRENT](docs/CURRENT.md) |
-| 值得保留的决策与失败经验 | [DECISIONS](docs/DECISIONS.md) |
-| 物件、纸面与连续交互约束 | [视觉基线](docs/DESIGN_REFERENCE.md) |
-| 命令、环境与配置 | [开发说明](docs/DEVELOPMENT.md) |
-| 来源字段与能力边界 | [后端数据清单](docs/BACKEND_DATA_CATALOG.md)、[来源技术细节](docs/data-sources.md) |
-| Agent 的检索、修改与验证规则 | [AGENTS.md](AGENTS.md) |
-
-## 仓库布局
-
-```text
-src/app/                       SSR 页面与同源 API
-src/server/                    固定来源、缓存、简报与私有工作区服务
-src/domain/                    类型、时间、太阳、归一化与摄影规则
-src/content/                   中文解释、胶片建议与原创许可知识
-src/components/                正式界面、数据接线与请求控制器
-public/                        正式素材与出处
-tests/                        单元、契约、浏览器测试与人工样例
-docs/                         当前知识与按需参考
-docs/archive/                 已完成计划、执行证据及旧前端
-prototype/                     独立离线视觉参考
-temp/                         本地参考材料（不入 Git）
+```sh
+pnpm workspace:migrate
+pnpm workspace:knowledge import src/content/knowledge/original-fieldcraft.v1.json
 ```
 
-直接打开 [prototype/index.html](prototype/index.html) 可查看固定上海样例；使用与检查方式见 [原型说明](prototype/README.md)。正式界面已按后续确认演化，当前设计以视觉基线为准。素材出处见 [正式素材](public/PROVENANCE.md)及[原型素材](prototype/assets/PROVENANCE.md)。
+在应用顶栏注册账户并配置模型。来源配置、缓存、检查命令与数据库操作见[开发说明](docs/DEVELOPMENT.md)。
 
-[历史归档](docs/archive/README.md)保留追溯入口，默认不参与日常开发；旧通过记录仅适用于当时的代码。小改动无需新增计划、执行和验收报告。
+## 实现结构
+
+| 部分 | 实现 |
+| --- | --- |
+| 应用 | Next.js App Router、React、TypeScript |
+| 物件交互 | 原生 DOM、CSS 3D 与 Web Animations API |
+| 天气与建议 | LangGraph 编排来源、归一化、太阳计算、摄影判断与中文解释 |
+| 天气来源 | GFS、MET、CAMS 与 ECMWF 空间云场 |
+| AI 摄影建议 | 账户模型配置、条件检索的摄影知识、结构化生成与内容校验 |
+| 拍摄计划 | 独立纸页编辑器、IndexedDB、本机与 PostgreSQL 账户同步 |
+| 数据契约 | Zod、北京时间 24 小时对齐、来源与缺失状态追踪 |
+
+晚霞分析沿日落方向采样本地与远处的空间云场，结合受光、遮挡、能见度和降水生成判断。账户模型凭证在服务端加密，计划与图片按账户隔离。
+
+[产品需求](requirement.md) · [详细规格](spec.md) · [架构](docs/ARCHITECTURE.md) · [当前设计](docs/DESIGN_REFERENCE.md) · [拍摄计划本设计](docs/SHOOTING_PLANNER_DESIGN.md)
+
+## 来源与项目状态
+
+天气与数据来源说明见[数据来源](docs/data-sources.md)，物件、纹理和展示画面的来源记录见[素材出处](public/PROVENANCE.md)。摄影知识的许可随知识条目保存。
+
+订阅纸单目前提供界面预览。真实微信订阅、发送与调度属于后续阶段。其余待核验事项集中记录在[当前状态](docs/CURRENT.md)。
