@@ -42,6 +42,19 @@ test('direct prototype structure, authored assets and readable newspaper',async(
  expect(errors).toEqual([]);
 });
 
+test('detail dialog keeps backdrop wheel from scrolling the page',async({page})=>{
+ if(test.info().project.name!=='wide')test.skip();
+ await open(page);
+ await page.locator('.light-device').click();
+ const backgroundScroll=await page.evaluate(()=>scrollY);
+ await expect(page.locator('#detail')).toBeVisible();
+ expect(await page.locator('body').evaluate(node=>node.style.overflow)).toBe('hidden');
+ await page.mouse.move(12,12);await page.mouse.wheel(0,500);
+ await expect.poll(()=>page.evaluate(()=>scrollY)).toBe(backgroundScroll);
+ await page.locator('#close-detail').click();await expect(page.locator('#detail')).not.toBeVisible();
+ expect(await page.locator('body').evaluate(node=>node.style.overflow)).toBe('');
+});
+
 test('no location has no fake weather; debounced search uses administrative context',async({page})=>{
  let searches=0;page.on('request',r=>{if(r.url().includes('/api/locations'))searches++;});
  await page.goto('/');await expect(page.getByRole('heading',{name:'尚未选择地点'})).toBeVisible();await expect(page.locator('#newspaper')).toHaveCount(0);

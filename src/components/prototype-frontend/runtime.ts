@@ -343,6 +343,7 @@ export function mountPrototype(briefing:Briefing, initialHour:number, initialGen
   const slipTrigger=el('button','peer-pull subscription-pull');
   slipTrigger.dataset.peer='subscription';slipTrigger.setAttribute('aria-label','从背包取出订阅单');bag.append(bookTrigger,slipTrigger);
   const holder=Symbol('peer-reader');
+  const detailHolder=Symbol('detail-dialog');
   let currentObject:'handbook'|'subscription'|null=null, returnFocus:HTMLElement|null=null;
   let returnScroll=0, subscriptionScroll=0, handbookScroll=0,returnTarget:string|null=null;
   function phase(value:string){reader.dataset.phase=value;if(currentObject)(currentObject==='handbook'?book:slip).dataset.phase=value;}
@@ -595,7 +596,7 @@ export function mountPrototype(briefing:Briefing, initialHour:number, initialGen
     if(!dialog.open){opener=button;button.focus({preventScroll:true});}
     sourceOverview=null;sourceTable=null;sourcePositions.clear();sourceGroup='weather';sourceFilter=false;
     activeDetail=kind;renderDetail(kind);
-    if(!dialog.open)dialog.showModal();
+    if(!dialog.open){lockModalPage(detailHolder);dialog.showModal();}
     dialog.scrollTop=0;$('#close-detail').focus();
   }
   on($('#close-detail'),'click',()=>$<HTMLDialogElement>('#detail').close());
@@ -611,6 +612,7 @@ export function mountPrototype(briefing:Briefing, initialHour:number, initialGen
     // Native close restores focus before this queued event. Do not let an old close
     // steal a subsequent intentional focus or clear a newly opened instrument.
     if($<HTMLDialogElement>('#detail').open)return;
+    unlockModalPage(detailHolder);
     closeHourDetail(false);
     closeSourceRecord(false);
     activeDetail='';
@@ -672,7 +674,7 @@ export function mountPrototype(briefing:Briefing, initialHour:number, initialGen
       returnScroll=saved.returnScroll;returnTarget=saved.returnTarget;handbookScroll=saved.handbookScroll;subscriptionScroll=saved.subscriptionScroll;
       if(saved.activeObject==='handbook'||saved.activeObject==='subscription')requestPeer(saved.activeObject,saved.returnTarget?document.querySelector<HTMLElement>(saved.returnTarget):null,true);
     },
-    destroy(){destroyed=true;cancelTurn();unbindPaper();unregister.forEach(fn=>fn());forgetPeer('handbook');forgetPeer('subscription');closeSourceRecord(false);closeHourDetail(false);endDialGesture();scope.abort();clearTimeout(resizeTimer);if(rafId)cancelAnimationFrame(rafId);[...reader.getAnimations({subtree:true}),...book.getAnimations(),...slip.getAnimations()].forEach(a=>a.cancel());reader.close();unlockModalPage(holder);reader.remove();const dialog=$<HTMLDialogElement>('#detail');if(dialog.open)dialog.close();pocketPaper.remove();document.body.classList.remove('compact','flow-paper','peer-objects','bag-footer-visible');document.body.classList.add('static');}
+    destroy(){destroyed=true;cancelTurn();unbindPaper();unregister.forEach(fn=>fn());forgetPeer('handbook');forgetPeer('subscription');closeSourceRecord(false);closeHourDetail(false);endDialGesture();scope.abort();clearTimeout(resizeTimer);if(rafId)cancelAnimationFrame(rafId);[...reader.getAnimations({subtree:true}),...book.getAnimations(),...slip.getAnimations()].forEach(a=>a.cancel());reader.close();unlockModalPage(holder);reader.remove();const dialog=$<HTMLDialogElement>('#detail');if(dialog.open)dialog.close();unlockModalPage(detailHolder);pocketPaper.remove();document.body.classList.remove('compact','flow-paper','peer-objects','bag-footer-visible');document.body.classList.add('static');}
   };
 }
 export type ObjectSnapshot={activeObject:PeerObject|null;genre:number;place:string;slot:string;preview:boolean;previewText:string;status:string;returnScroll:number;returnTarget:string|null;handbookScroll:number;subscriptionScroll:number};
