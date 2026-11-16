@@ -544,6 +544,7 @@ noscript [data-source-record]{pointer-events:none;text-decoration:none!important
 .advice-evidence details{margin:12px 0}.advice-evidence summary{cursor:pointer;min-height:36px}.advice-evidence article{padding:12px;border-left:2px solid #a18e68;margin:8px 0;overflow-wrap:anywhere}
 @media(min-width:1100px) and (min-height:820px){.site-header{gap:15px;padding-inline:24px}.site-header nav{gap:15px}.brand span{display:none}.fixture-label{padding-left:14px}}
 @media(max-width:1099px),(max-height:819px){.site-header{gap:10px;padding-inline:16px}.advice-status{margin-top:115px}.full-advice-reading{padding:0 16px!important}.full-advice-reading>.advice-detail{padding:24px}.compact .site-header{grid-template-columns:auto 1fr auto auto auto}}
+.site-header .header-actions{display:flex;align-items:center;gap:16px;margin-left:auto;flex:none}
 @media print{.advice-status{display:none}.full-advice-reading{display:block}}
 /* T10: the newspaper journey ends at a stable bag; peers move only on request. */
 body.peer-objects:not(.static) .journey{height:calc(100svh + 3.2 * 100svh)}
