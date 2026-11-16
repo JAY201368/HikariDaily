@@ -40,7 +40,7 @@
 
 关键文字与读数是真实 DOM，与器材图片分离。风险、未知和人工数据标识清楚。静态/减少动效保留全部内容、小时选择、题材与详情；装饰副本不可交互且对辅助阅读隐藏，过渡中不可见控件不获焦点。
 
-素材出处见 [public/PROVENANCE](../public/PROVENANCE.md)和[原型出处](../prototype/assets/PROVENANCE.md)。项目负责人确认当前素材可随公开源码仓库发布；更早的素材来源记录仍在出处文件中。旧方案和纠正过程仅在[归档](archive/README.md)按需追溯。
+素材出处见 [public/PROVENANCE](../public/PROVENANCE.md)和[原型出处](../prototype/assets/PROVENANCE.md)。生成过程和去除品牌不构成公开使用许可证明；未解决权利问题见 [CURRENT](CURRENT.md)。旧方案和纠正过程仅在[归档](archive/README.md)按需追溯。
 
 ## AI 摄影建议与账户
 
