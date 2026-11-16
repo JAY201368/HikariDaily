@@ -204,3 +204,4 @@ transition:none!important}
  .site-header .header-actions .header-account { max-width:min(36vw,180px); overflow:hidden; text-overflow:ellipsis; min-height:32px; }
 }
 .account-app input[type=checkbox] { accent-color:#49654c; }
+.account-return{max-width:640px;margin:12vh auto;padding:24px;background:var(--paper-image);box-shadow:0 14px 45px #40311d25}

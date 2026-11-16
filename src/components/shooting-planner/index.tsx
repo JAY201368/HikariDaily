@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
+import { AUTH_NAVIGATION, ACCOUNT_DELETED } from '../account/navigation';
 import { useWorkspaceAccount } from '../account/account';
 import { activePeer, dockLift, forgetPeer, objectMotion, preparePeerDock, rectTransform, registerPeer, requestPeer } from '../prototype-frontend/peer-objects';
 import { lockModalPage, unlockModalPage } from '../shared/modal-lock';
@@ -36,6 +37,13 @@ export function ShootingPlanner({ briefing, hour, genre, advice }: Props) {
   useLayoutEffect(() => { ownerRef.current = owner?.id; }, [owner?.id]);
   const [guestCount, setGuestCount] = useState(0);
   const scope = owner && enabledOwner === owner.id ? owner.id : null;
+
+  useEffect(() => {
+    const prepare = (event: Event) => (event as CustomEvent).detail.waitUntil(runtime.current?.prepareNavigation() ?? Promise.resolve());
+    const deleted = (event: Event) => { if ((event as CustomEvent).detail.ownerId === ownerRef.current) { runtime.current?.destroy(); runtime.current = null; const current = storage.current; current?.destroy(); (event as CustomEvent).detail.waitUntil(current?.flush() ?? Promise.resolve()); storage.current = null; } };
+    window.addEventListener(AUTH_NAVIGATION, prepare); window.addEventListener(ACCOUNT_DELETED, deleted);
+    return () => { window.removeEventListener(AUTH_NAVIGATION, prepare); window.removeEventListener(ACCOUNT_DELETED, deleted); };
+  }, []);
 
   useLayoutEffect(() => {
     let disposed = false;

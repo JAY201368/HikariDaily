@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { IDBFactory } from 'fake-indexeddb';
 import { emptyNotebook, importNotebook, notebookSchema, planSchema, photoSchema } from '@/domain/planner';
-import { PlannerStorage, localGet, type LocalRecord } from '@/components/shooting-planner/storage';
+import { PlannerStorage, localGet, localPut, purgePlannerAccount, type LocalRecord } from '@/components/shooting-planner/storage';
 
 const sessions: PlannerStorage[] = [];
 const plan = (id = 'plan-one') => planSchema.parse({ id, title: '沿江拍摄', date: '', location: '', genre: '街拍', intent: '', notes: '', createdAt: 1, updatedAt: 1, schedule: [], checklist: [], photos: [], extraPages: [] });
@@ -149,5 +149,26 @@ describe('planner document contracts', () => {
   });
   it('removes runtime URLs from persisted images', () => {
     expect(photoSchema.parse({ id: 'p', assetId: 'a'.repeat(64), name: '', caption: '', annotations: [], source: 'blob:private' })).not.toHaveProperty('source');
+  });
+});
+
+describe('account deletion browser cleanup', () => {
+  it('removes only the deleted owner notebook, images, annotations, view and sync preference', async () => {
+    for (const owner of ['guest', 'owner-a', 'owner-b']) {
+      await localPut('notebooks', owner, { notebook: notebook() });
+      await localPut('assets', `${owner}:image`, new Blob(['test']));
+      for (const prefix of ['draft', 'view', 'sync']) await localPut('settings', `${prefix}:${owner}`, 'saved');
+    }
+    await purgePlannerAccount('owner-a');
+    for (const owner of ['guest', 'owner-b']) {
+      expect(await localGet('notebooks', owner)).toBeDefined();
+      expect(await localGet('assets', `${owner}:image`)).toBeDefined();
+      expect(await localGet('settings', `draft:${owner}`)).toBe('saved');
+    }
+    await expect(localPut('settings', 'view:owner-a', 'late write')).rejects.toThrow();
+    await expect(localPut('notebooks', 'owner-a', { notebook: notebook() })).rejects.toThrow();
+    expect(await localGet('notebooks', 'owner-a')).toBeUndefined();
+    expect(await localGet('assets', 'owner-a:image')).toBeUndefined();
+    for (const prefix of ['draft', 'view', 'sync']) expect(await localGet('settings', `${prefix}:owner-a`)).toBeUndefined();
   });
 });

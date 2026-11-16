@@ -57,7 +57,7 @@ export async function assertConfigVersion(client: PoolClient, ownerId: string, v
         throw staleConfig();
 }
 export async function checkConfigVersion(ownerId: string, version: number) {
-    const { rowCount } = await query("SELECT 1 FROM accounts a JOIN model_configs c ON c.owner_id=a.id WHERE a.id=$1 AND a.model_version=$2 AND c.version=$2", [ownerId, version]);
+    const { rowCount } = await query("SELECT 1 FROM accounts a JOIN model_configs c ON c.owner_id=a.id WHERE a.id=$1 AND NOT a.deletion_pending AND a.model_version=$2 AND c.version=$2", [ownerId, version]);
     if (!rowCount)
         throw staleConfig();
 }

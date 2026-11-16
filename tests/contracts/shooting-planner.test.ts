@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 vi.mock('server-only', () => ({}));
 import { createHash, randomUUID } from 'node:crypto';
 import sharp from 'sharp';
-import { register } from '@/server/workspace/auth';
+import { register } from '../fixtures/workspace/identity';
 import { closeDatabase, query } from '@/server/workspace/db';
 import { migrate } from '@/server/workspace/migrate';
 import { handleNotebook, handleImage } from '@/server/workspace/planner/routes';
@@ -14,7 +14,7 @@ const accounts: Awaited<ReturnType<typeof register>>[] = [];
 function request(index: number, method = 'GET', body?: unknown, expectedOwner = accounts[index]?.account.id) {
   return new Request(`${origin}/api/workspace/planner`, { method, headers: {
     origin, 'content-type': body instanceof Uint8Array ? 'application/octet-stream' : 'application/json',
-    cookie: `hikari_session=${accounts[index]?.token}`, 'X-Planner-Owner': expectedOwner,
+    cookie: `hikari_identity.session_token=${accounts[index]?.token}`, 'X-Planner-Owner': expectedOwner,
   }, body: body === undefined ? undefined : body instanceof Uint8Array ? Buffer.from(body) : JSON.stringify(body) });
 }
 database('private planner persistence', () => {

@@ -56,7 +56,7 @@ export async function rateLimit(key: string, limit: number, windowSeconds = 600)
     hits=CASE WHEN workspace_rate_limits.starts_at < now()-make_interval(secs=>$2) THEN 1 ELSE workspace_rate_limits.hits+1 END,
     starts_at=CASE WHEN workspace_rate_limits.starts_at < now()-make_interval(secs=>$2) THEN now() ELSE workspace_rate_limits.starts_at END RETURNING hits`, [tokenHash(key), windowSeconds]);
     if (rows[0].hits > limit)
-        throw new WorkspaceError("RATE_LIMITED", 429, "操作频繁，请稍后重试");
+        throw new WorkspaceError("RATE_LIMITED", 429, "操作频繁，请稍后重试", { retryAfter: windowSeconds });
 }
 export async function mutation(request: Request, name: string, limit = 60) {
     requireSameOrigin(request);
@@ -77,7 +77,7 @@ export async function route(work: () => Promise<Response>) {
     catch (error) {
         const known = error instanceof WorkspaceError ? error : unavailable();
         return new Response(JSON.stringify({ data: null, error: { code: known.code, message: known.message, ...known.details } }), {
-            status: known.status, headers: { "Cache-Control": "no-store", "Content-Type": "application/json; charset=utf-8", "X-Content-Type-Options": "nosniff", ...(known.status === 429 ? { "Retry-After": "600" } : {}) },
+            status: known.status, headers: { "Cache-Control": "no-store", "Content-Type": "application/json; charset=utf-8", "X-Content-Type-Options": "nosniff", ...(known.details?.retryAfter ? { "Retry-After": String(known.details.retryAfter) } : known.status === 429 ? { "Retry-After": "600" } : {}) },
         });
     }
 }

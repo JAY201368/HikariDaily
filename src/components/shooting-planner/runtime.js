@@ -835,7 +835,7 @@ export function mountPlanner(root, options) {
 
   function saveAnnotationDraft() {
     options.draft = { photoId: annotation.photoId, planId: annotation.planId, items: annotation.items, crop: annotation.crop, rotation: annotation.rotation };
-    options.storage.draft(options.draft).catch(() => { byId('annotation-hint').textContent = '批注草稿保存失败，请点击完成重试'; });
+    return options.storage.draft(options.draft).catch(() => { byId('annotation-hint').textContent = '批注草稿保存失败，请点击完成重试'; });
   }
 
   function annotationSnapshot() { return clone({ items: annotation.items, crop: annotation.crop, rotation: annotation.rotation }); }
@@ -1343,6 +1343,11 @@ export function mountPlanner(root, options) {
   document.fonts?.ready.then(() => { if (!destroyed) render(); });
   render();
   return {
+    async prepareNavigation() {
+      document.activeElement?.blur();
+      if (annotation) { saveAnnotationDraft(); await options.storage.draft(options.draft); }
+      await options.storage.flush();
+    },
     refresh() { pageCounts.clear(); render(); },
     showIndex() { pageCounts.clear(); state.closed = false; state.planId = null; state.spread = 0; state.query = ''; state.trash = false; render(); },
     replace(notebook) { const anchor = captureInlineSelection(); store = clone(notebook); if (!currentPlan()) state.planId = null; writingHistory = []; writingFuture = []; render(anchor); },

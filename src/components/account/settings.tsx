@@ -1,51 +1,31 @@
 "use client";
-import { useState, useRef, type FormEvent } from "react";
+import { useState, useRef } from "react";
 import { workspaceApi } from "./api";
 import type { ModelConfigView } from "@/domain/workspace/model";
+import { authAction, prepareAuthNavigation, clearDeletedAccount } from "./navigation";
+import { purgePlannerAccount } from "../shooting-planner/storage";
 import { announceWorkspaceChange, useWorkspaceAccount } from "./account";
 
-export function AccountGate({ onAccount }: { onAccount: (account: { id: string; username: string; }) => void; }) {
-  const life = useLifetime();
-  const { accountBusy, runAccountAction } = useWorkspaceAccount();
-  const [register, setRegister] = useState(false), [busy, setBusy] = useState(false), [message, setMessage] = useState("");
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault(); const form = event.currentTarget; const data = new FormData(form); setBusy(true); setMessage("");
-    try { await runAccountAction(async () => { const account = await workspaceApi<{ id: string; username: string; }>(`auth/${register ? "register" : "login"}`, "POST", { username: data.get("username"), password: data.get("password") }); if (life.current) form.reset(); onAccount(account); }); }
-    catch (error) { if (life.current) setMessage((error as Error).message); } finally { if (life.current) setBusy(false); }
-  }
-  return <section className="account-gate">
-    <p className="account-eyebrow">HIKARI ACCOUNT</p>
-    <h1>登录逐光<br />配置摄影建议</h1>
-    <p>报纸与摄影手册共用账户中的模型配置。登录后可设置自己的模型服务，生成 AI 摄影建议。</p>
-    <form onSubmit={submit}>
-      <h2>{register ? "注册账户" : "登录逐光账户"}</h2>
-      <label>用户名<input name="username" autoComplete="username" required minLength={3} maxLength={32} pattern="[A-Za-z0-9_]+" />
-      </label>
-      <small>3–32 位英文字母、数字或下划线</small>
-      <label>密码<input name="password" type="password" autoComplete={register ? "new-password" : "current-password"} required minLength={12} maxLength={256} />
-      </label>
-      <small>至少 12 个字符</small>
-      <button disabled={busy || accountBusy}>{busy ? "正在处理…" : register ? "注册" : "登录"}</button>
-      <button type="button" disabled={busy || accountBusy} className="account-quiet" onClick={() => { setRegister(!register); setMessage(""); }}>{register ? "已有账户，登录" : "第一次来，注册"}</button>
-      <p role="alert">{message}</p>
-    </form>
-  </section>;
-}
-export function Settings({ onLogout, onClose }: { onLogout: () => void; onClose: () => void; }) {
+export function Settings({ onLogout, onClose, onDeleted }: { onLogout: () => void; onClose: () => void; onDeleted: () => void; }) {
   const { owner, config, refreshConfig, accountBusy, runAccountAction, requestPlannerSync } = useWorkspaceAccount();
+  const [resendAt, setResendAt] = useState(0), [clock, setClock] = useState(Date.now);
+  const resendSeconds = Math.max(0, Math.ceil((resendAt - clock) / 1000));
+  useEffect(() => { if (!resendAt) return; const timer = setInterval(() => setClock(Date.now()), 1000); return () => clearInterval(timer); }, [resendAt]);
+  const [deleting, setDeleting] = useState(!!owner?.deletionStage), [codeSent, setCodeSent] = useState(false);
   const [key, setKey] = useState(""), [url, setUrl] = useState(config?.baseUrl || ""), [model, setModel] = useState(config?.model || ""), [busy, setBusy] = useState(false), [message, setMessage] = useState("");
   const urlEdited = useRef(false), modelEdited = useRef(false);
   useEffect(() => { if (!config) return; queueMicrotask(() => { if (!urlEdited.current) setUrl(config.baseUrl || ""); if (!modelEdited.current) setModel(config.model || ""); }); }, [config]);
   // Settings unmounts on close/account changes; identity mutation serialization lives above it.
   const life = useLifetime();
-  async function action(fn: () => Promise<unknown>, success: string) { setBusy(true); setMessage(""); try { await runAccountAction(fn); await refreshConfig(); if (!life.current) return; setMessage(success); } catch (error) { if (life.current) { setMessage((error as Error).message); await refreshConfig(); } } finally { if (life.current) setBusy(false); } }
+  async function action(fn: () => Promise<unknown>, success: string) { setBusy(true); setMessage(""); try { await runAccountAction(fn); await refreshConfig(); if (!life.current) return; setMessage(success); } catch (error) { if (life.current) { if ((error as { code?: string }).code === "DELETE_PENDING") { setDeleting(true); sessionStorage.setItem("hikari:deleting-owner", owner!.id); } setMessage((error as Error).message); await refreshConfig(); } } finally { if (life.current) setBusy(false); } }
   const announce = announceWorkspaceChange;
   return <section className="account-settings" aria-label="账户与模型设置">
     <div className="account-row">
       <h2>账户与模型设置</h2>
       <button onClick={onClose}>收起</button>
     </div>
-    <p>{owner?.username} · 全局账户</p>
+    <p>{owner?.username}{owner?.username !== owner?.email && <> · {owner?.email}</>}</p>
+    {!deleting && <>
     <section className="account-planner-settings" aria-label="拍摄计划同步">
       <div><h3>拍摄计划</h3><p>导入本机计划并开启账户同步，或继续在此浏览器使用。</p></div>
       <button type="button" disabled={busy || accountBusy} onClick={requestPlannerSync}>导入与同步</button>
@@ -69,26 +49,28 @@ export function Settings({ onLogout, onClose }: { onLogout: () => void; onClose:
       <small>能力检测会向所配置服务发送文本、图像、工具三次请求。</small>
       <ul className="account-capabilities">{([["text", "文本"], ["image", "图像"], ["tools", "工具"]] as const).map(([id, name]) => <li key={id}>{name}：{({ available: "可用", unavailable: "检测未通过", untested: "未检测" })[config?.capabilities[id] || "untested"]}</li>)}</ul>
     </form>
-    <details>
-      <summary>修改密码</summary>
-      <form onSubmit={e => { e.preventDefault(); const form = e.currentTarget, data = new FormData(form); void action(async () => { await workspaceApi("auth/password", "PUT", { currentPassword: data.get("currentPassword"), nextPassword: data.get("nextPassword") }); form.reset(); announce(); }, "密码已更新，其他会话已退出"); }}>
-        <label>当前密码<input name="currentPassword" type="password" autoComplete="current-password" required />
-        </label>
-        <label>新密码<input name="nextPassword" type="password" autoComplete="new-password" required minLength={12} maxLength={256} />
-        </label>
-        <button disabled={busy || accountBusy}>更新密码</button>
+    <a className="account-quiet" href="/api/workspace/auth/profile">管理账户资料 ↗</a>
+    </>}
+    <details open={deleting || undefined}>
+      <summary>注销账户与全部私人资料</summary>
+      <p>{deleting ? "账户正在注销，私人功能已停用。重试将继续完成身份与私人资料清理。" : "注销将删除登录身份、模型配置、账户计划和图片。本机游客计划保留。"}</p>
+      {!deleting && <button type="button" disabled={busy || accountBusy || resendSeconds > 0} onClick={() => void action(async () => { try { await workspaceApi("auth/delete-code", "POST"); } catch (error) { const seconds = (error as { retryAfter?: number }).retryAfter; if (seconds) { setClock(Date.now()); setResendAt(Date.now() + seconds * 1000); } throw error; } setCodeSent(true); setClock(Date.now()); setResendAt(Date.now() + 60000); }, "注销验证码已发送至账户邮箱")}>{resendSeconds ? `${resendSeconds} 秒后可重发` : codeSent ? "重新发送验证码" : "发送注销验证码"}</button>}
+      <form onSubmit={e => { e.preventDefault(); const data = new FormData(e.currentTarget); void action(async () => {
+        await prepareAuthNavigation();
+        const ownerId = owner!.id;
+        try { await workspaceApi("auth/account", "DELETE", deleting ? {} : { code: data.get("code") }); }
+        catch (error) { if ((error as { code?: string }).code === "DELETE_PENDING") { setDeleting(true); announce(); } throw error; }
+        sessionStorage.setItem("hikari:deleting-owner", ownerId);
+        await clearDeletedAccount(ownerId);
+        await purgePlannerAccount(ownerId);
+        sessionStorage.removeItem("hikari:deleting-owner");
+        setKey(""); onDeleted(); announce();
+      }, "账户与私人资料已注销"); }}>
+        {!deleting && <label>邮箱验证码<input name="code" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" required maxLength={6} /></label>}
+        <button className="account-danger" disabled={busy || accountBusy || (!deleting && !codeSent)}>{deleting ? "重试完成注销" : "验证并永久注销账户"}</button>
       </form>
     </details>
-    <details>
-      <summary>删除账户与全部私人资料</summary>
-      <p>删除账户将清除模型配置、登录会话和该账户关联的私人资料。</p>
-      <form onSubmit={e => { e.preventDefault(); const data = new FormData(e.currentTarget); void action(async () => { await workspaceApi("auth/account", "DELETE", { password: data.get("password") }); setKey(""); announce(); onLogout(); }, "账户已删除"); }}>
-        <label>输入密码确认删除<input name="password" type="password" required autoComplete="current-password" />
-        </label>
-        <button className="account-danger" disabled={busy || accountBusy}>永久删除账户</button>
-      </form>
-    </details>
-    <button disabled={busy || accountBusy} onClick={() => void action(async () => { await workspaceApi("auth/logout", "POST"); setKey(""); announce(); onLogout(); }, "已退出")}>退出登录</button>
+    <button disabled={busy || accountBusy} onClick={() => void action(async () => { await authAction("sign-out"); setKey(""); announce(); onLogout(); }, "已退出")}>退出登录</button>
     <p role="status">{busy ? "正在处理…" : message}</p>
   </section>;
 }

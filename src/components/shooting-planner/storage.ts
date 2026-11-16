@@ -26,26 +26,38 @@ export async function localGet<T>(table: string, key: string): Promise<T | undef
     tx.onerror = () => { db.close(); reject(tx.error); };
   });
 }
+function ownerForKey(table: string, key: string) {
+  if (table === 'notebooks') return key;
+  if (table === 'assets') return key.split(':')[0];
+  return /^(?:draft|view|sync):(.+)$/.exec(key)?.[1] ?? null;
+}
+function permitWrite(tx: IDBTransaction, owner: string | null, write: () => void) {
+  if (!owner || owner === 'guest') { write(); return; }
+  const check = tx.objectStore('settings').get(`deleted:${owner}`);
+  check.onsuccess = () => { if (check.result) tx.abort(); else write(); };
+}
 export async function localPut(table: string, key: string, value: unknown) {
   const db = await database();
   return new Promise<void>((resolve, reject) => {
-    const tx = db.transaction(table, 'readwrite');
-    tx.objectStore(table).put(value, key);
+    const tx = db.transaction([...new Set([table, 'settings'])], 'readwrite');
+    permitWrite(tx, ownerForKey(table, key), () => tx.objectStore(table).put(value, key));
     tx.oncomplete = () => { db.close(); resolve(); };
-    tx.onabort = () => { db.close(); reject(new Error('本机保存失败，请检查存储空间后重试')); };
+    tx.onabort = () => { db.close(); reject(new Error('本机保存失败，请检查账户和存储空间后重试')); };
   });
 }
 async function writeRecord(key: string, value: LocalRecord, expectedClock: number) {
   const db = await database();
   return new Promise<void>((resolve, reject) => {
-    const tx = db.transaction('notebooks', 'readwrite');
+    const tx = db.transaction(['notebooks', 'settings'], 'readwrite');
     const table = tx.objectStore('notebooks');
     let conflict = false;
+    permitWrite(tx, key, () => {
     const read = table.get(key);
     read.onsuccess = () => {
       if ((read.result?.clock ?? 0) !== expectedClock) { conflict = true; tx.abort(); }
       else table.put(value, key);
     };
+    });
     tx.oncomplete = () => { db.close(); resolve(); };
     tx.onabort = () => { db.close(); reject(new Error(conflict ? '另一窗口已修改本机计划，请合并保存' : '本机保存失败，请检查存储空间后重试')); };
   });
@@ -161,6 +173,7 @@ export class PlannerStorage {
     }
   }
   async flush() {
+    await this.settingsQueue;
     await this.queue.catch(() => {});
     if (this.localFailed) throw new Error('本机保存失败，请重试后再切换计划本');
   }
@@ -261,4 +274,19 @@ export class PlannerStorage {
     for (const url of this.urls.values()) URL.revokeObjectURL(url);
     this.urls.clear();
   }
+}
+
+/** Delete one account's browser copies; guest originals and other accounts survive. */
+export async function purgePlannerAccount(ownerId: string) {
+  const db = await database();
+  return new Promise<void>((resolve, reject) => {
+    const tx = db.transaction(['notebooks', 'assets', 'settings'], 'readwrite');
+    tx.objectStore('settings').put(true, `deleted:${ownerId}`);
+    tx.objectStore('notebooks').delete(ownerId);
+    const assets = tx.objectStore('assets').openCursor();
+    assets.onsuccess = () => { const cursor = assets.result; if (!cursor) return; if (String(cursor.key).startsWith(`${ownerId}:`)) cursor.delete(); cursor.continue(); };
+    for (const key of [`sync:${ownerId}`, `draft:${ownerId}`, `view:${ownerId}`]) tx.objectStore('settings').delete(key);
+    tx.oncomplete = () => { db.close(); resolve(); };
+    tx.onabort = () => { db.close(); reject(new Error('账户本机缓存清理失败，请重试')); };
+  });
 }

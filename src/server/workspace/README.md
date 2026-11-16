@@ -2,21 +2,23 @@
 
 ## Persistence and identity
 
-PostgreSQL15+ stores accounts, opaque sessions, encrypted model configuration, shared photography knowledge, rate limits and optional weather-source cache. Apply migrations explicitly with `pnpm workspace:migrate`.
+PostgreSQL15+ stores local accounts, independent Better Auth identity/session tables, encrypted model configuration, shared photography knowledge, rate limits and optional weather-source cache. Apply migrations explicitly with `pnpm workspace:migrate`.
 
-The current migration set contains 005 (knowledge), 013 (source cache) and 015 (account foundation). Migration015 uses idempotent table creation for existing installations. Previously applied migration records and stored data are retained.
+The current migration set contains 005 (knowledge), 013 (source cache) 015 (legacy account foundation), 016 (private planner) and 017 (Authing identity/deletion progress). Migration015 uses idempotent table creation for existing installations. Previously applied migration records and stored data are retained.
 
-Private writes validate same origin, authenticate the account and apply persistent rate limits. Account and model mutations serialize on the owner row. Passwords use scrypt and sessions use hashed opaque tokens in HttpOnly cookies. Credential encryption uses an owner/version-bound AES-GCM key ring.
+Private writes validate same origin, authenticate the account and apply persistent rate limits. Account and model mutations serialize on the owner row. Authing handles hosted email-code identity; Better Auth 1.7.25 handles OIDC authorization codes, PKCE, ID-token verification and database sessions in HttpOnly cookies. Provider subjects map to fresh local UUIDs; legacy account data remains and legacy session cookies are rejected. Credential encryption uses an owner/version-bound AES-GCM key ring.
 
 ## HTTP API
 
-- `/api/workspace/auth/register`, `/login`, `/logout`, `/session`, `/password` and `/account` manage identity.
+- `/api/auth/sign-in/social`, `/callback/authing`, `/sign-out` and `/error` expose the required Better Auth protocol surface. Other standard library management and token endpoints are not publicly exposed. Writes and callback destinations require the configured exact origin.
+- `GET /api/workspace/auth/session` returns local UUID, display name (`username`) and email, with `deletionStage` while deletion is pending. `/auth/profile` redirects authenticated accounts to Authing's personal center. Legacy `/auth/register`, `/login`, `/logout` and `/password` return410.
+- `POST /api/workspace/auth/delete-code` sends Authing's deletion-purpose code to the session email. `DELETE /api/workspace/auth/account` accepts `{code}` for first verification and `{}` for pending retries. Only provider verification creates durable deletion intent; no private access remains after that point. External deletion is confirmed before transactional local cleanup. `pnpm workspace:resume-deletion <local-UUID>` resumes a verified job after session loss. See [setup and recovery](../../../docs/AUTHING_SETUP.md).
 - `/api/workspace/model` reads or changes configuration, and `/api/workspace/model/probe` independently checks text, image and tool capabilities.
 - `/api/workspace/advice/context` exposes current owner/configuration eligibility.
 - `/api/workspace/advice` returns authoritative paired briefing and private advice.
 - `/api/workspace/knowledge` retrieves the public photography corpus for an authenticated account.
 
-All responses use no-store envelopes. Model Keys never return to clients or enter logs, public caches or generation prompts.
+Business API responses use no-store envelopes; OIDC endpoints use Better Auth protocol responses. Model Keys never return to clients or enter logs, public caches or generation prompts.
 
 ## Model boundary
 

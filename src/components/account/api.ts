@@ -1,5 +1,5 @@
 export class WorkspaceError extends Error {
-  constructor(message: string, public code = "NETWORK", public ambiguous = false) {
+  constructor(message: string, public code = "NETWORK", public ambiguous = false, public retryAfter?: number) {
     super(message);
   }
 }
@@ -9,6 +9,6 @@ export async function workspaceApi<T>(path: string, method = "GET", body?: unkno
   catch { throw new WorkspaceError("网络连接中断", "NETWORK", method !== "GET"); }
   let envelope;
   try { envelope = await response.json(); } catch { throw new WorkspaceError("服务响应未确认", "RESPONSE", method !== "GET"); }
-  if (!response.ok || envelope.error) throw new WorkspaceError(envelope.error?.message || "请求未完成", envelope.error?.code, response.status >= 500 && method !== "GET");
+  if (!response.ok || envelope.error) throw new WorkspaceError(envelope.error?.message || "请求未完成", envelope.error?.code, response.status >= 500 && method !== "GET", Number(response.headers.get("Retry-After")) || undefined);
   return envelope.data as T;
 }

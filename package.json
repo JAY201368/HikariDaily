@@ -18,12 +18,15 @@
     "build:showcase": "node scripts/build-showcase.mjs",
     "start": "next start",
     "workspace:migrate": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --conditions=react-server --import tsx scripts/workspace-migrate.ts",
-    "workspace:knowledge": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --conditions=react-server --import tsx scripts/workspace-knowledge.ts"
+    "workspace:knowledge": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --conditions=react-server --import tsx scripts/workspace-knowledge.ts",
+    "workspace:resume-deletion": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --conditions=react-server --import tsx scripts/workspace-resume-deletion.ts"
   },
   "dependencies": {
     "@langchain/core": "1.3.0",
     "@langchain/langgraph": "1.5.3",
     "@vercel/functions": "3.10.3",
+    "authing-node-sdk": "^4.0.2",
+    "better-auth": "1.7.25",
     "motion": "14.6.0",
     "next": "16.4.2",
     "pg": "8.23.1",

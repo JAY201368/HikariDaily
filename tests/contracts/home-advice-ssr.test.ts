@@ -3,7 +3,7 @@ vi.mock("server-only",()=>({}));
 import { loadHomeAdvice, handleAdviceContext } from "../../src/server/workspace/home-advice";
 import { homeAdviceFixture, homeContext } from "../fixtures/workspace/home-advice";
 import { qualityBriefing } from "../fixtures/workspace/advice";
-const request=(authenticated=true)=>new Request("https://hikari.invalid/",{headers:authenticated?{cookie:`hikari_session=${"a".repeat(43)}`}:{}});
+const request=(authenticated=true)=>new Request("https://hikari.invalid/",{headers:authenticated?{cookie:`hikari_identity.session_token=${"a".repeat(43)}`}:{}});
 describe("private SSR advice uses one already loaded fact snapshot",()=>{
   it("does not consult persistence for anonymous weather",async()=>{
     const getAdviceContext=vi.fn(),enhanceBriefing=vi.fn(),rateLimit=vi.fn();

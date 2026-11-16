@@ -2,6 +2,7 @@ import type { Notebook, Reference } from '@/domain/planner';
 import type { PlannerStorage } from './storage';
 export type PlannerRuntimeStorage = Pick<PlannerStorage, 'save' | 'flush' | 'draft' | 'view' | 'addImage' | 'retryImage'>;
 export type PlannerRuntime = {
+  prepareNavigation(): Promise<void>;
   showIndex(): void;
   refresh(): void;
   replace(notebook: Notebook): void;

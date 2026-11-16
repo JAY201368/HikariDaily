@@ -33,7 +33,7 @@ export async function lockOwner(client: PoolClient, ownerId: string): Promise<{
     const { rows } = await client.query<{
         id: string;
         model_version: number;
-    }>("SELECT id, model_version FROM accounts WHERE id=$1 FOR UPDATE", [ownerId]);
+    }>("SELECT id, model_version FROM accounts WHERE id=$1 AND NOT deletion_pending FOR UPDATE", [ownerId]);
     if (!rows[0])
         throw unauthorized();
     return rows[0];

@@ -8,7 +8,8 @@ import { EventEmitter } from "node:events";
 import { PassThrough } from "node:stream";
 import { closeDatabase, getPool, lockOwner, query, transaction, withOwnerLock } from "../../src/server/workspace/db";
 import { migrate } from "../../src/server/workspace/migrate";
-import { changePassword, cookieHeader, deleteAccount, login, logout, register, requireAccount, tokenHash } from "../../src/server/workspace/auth";
+import { requireAccount, tokenHash } from "../../src/server/workspace/auth";
+import { register } from "../fixtures/workspace/identity";
 import { handleAuth } from "../../src/server/workspace/auth-routes";
 import { handleModel } from "../../src/server/workspace/model-routes";
 import { assertConfigVersion, deleteModelConfig, getModelConfig, putModelConfig } from "../../src/server/workspace/config";
@@ -22,7 +23,7 @@ const database = testUrl ? describe : describe.skip;
 const ownerIds: string[] = [];
 const password = "a-long-test-password-47";
 const origin = "http://localhost:3000";
-const req = (path: string, method = "GET", body?: unknown, token?: string) => new Request(`${origin}${path}`, { method, headers: { origin, "content-type": "application/json", ...(token ? { cookie: `hikari_session=${token}` } : {}) }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
+const req = (path: string, method = "GET", body?: unknown, token?: string) => new Request(`${origin}${path}`, { method, headers: { origin, "content-type": "application/json", ...(token ? { cookie: `hikari_identity.session_token=${token}` } : {}) }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
 const input: ChatInput = { messages: [{ role: "user", content: "hello" }] };
 const success = { choices: [{ message: { role: "assistant", content: "hello" } }] };
 async function account() { const result = await register({ username: `u_${randomUUID().replaceAll("-", "").slice(0, 20)}`, password }); ownerIds.push(result.account.id); return result; }
@@ -96,13 +97,7 @@ describe("workspace HTTP and credential boundaries", () => {
         expect(() => decryptCredential("owner", 1, changed)).toThrow();
         process.env.HIKARI_CREDENTIAL_KEYS = original;
     });
-    it("sets opaque HttpOnly same-site cookies, and Secure in production", () => {
-        expect(cookieHeader("token")).toContain("HttpOnly; SameSite=Strict");
-        vi.stubEnv("NODE_ENV", "production");
-        expect(cookieHeader("token")).toContain("; Secure");
-        vi.unstubAllEnvs();
-        expect(cookieHeader(null)).toContain("Max-Age=0");
-    });
+
 });
 database("workspace foundation real PostgreSQL (explicit HIKARI_TEST_DATABASE_URL only)", () => {
     beforeAll(async () => {
@@ -143,31 +138,20 @@ database("workspace foundation real PostgreSQL (explicit HIKARI_TEST_DATABASE_UR
             second.release();
         }
     });
-    it("registers, persists hashed sessions, rejects passwords, expires, logs out and changes password", async () => {
+    it("reads signed library sessions, rejects expiry and revocation, and rejects legacy cookies", async () => {
         const result = await account();
-        const a = result.account;
-        const row = (await query("SELECT password_hash FROM accounts WHERE id=$1", [a.id])).rows[0];
-        expect(row.password_hash).toMatch(/^scrypt\$/);
-        expect(row.password_hash).not.toContain(password);
-        expect((await query("SELECT token_hash FROM sessions WHERE owner_id=$1", [a.id])).rows[0].token_hash).toBe(tokenHash(result.token));
-        expect(await requireAccount(req("/", "GET", undefined, result.token))).toEqual(a);
-        await expect(login({ username: a.username, password: "incorrect-password" })).rejects.toMatchObject({ code: "LOGIN_FAILED" });
-        const again = await login({ username: a.username.toUpperCase(), password });
-        await closeDatabase();
-        expect(await requireAccount(req("/", "GET", undefined, again.token))).toEqual(a);
-        await logout(req("/", "POST", {}, again.token));
-        await expect(requireAccount(req("/", "GET", undefined, again.token))).rejects.toMatchObject({ status: 401 });
-        const changed = await changePassword(a.id, password, "a-new-long-password-58");
+        expect(await requireAccount(req("/", "GET", undefined, result.token))).toEqual(result.account);
+        await expect(requireAccount(new Request(origin, { headers: { cookie: `hikari_session=${result.token}` } }))).rejects.toMatchObject({ status: 401 });
+        await query('UPDATE identity_sessions SET "expiresAt"=now()-interval \'1 second\' WHERE token=$1', [result.session]);
         await expect(requireAccount(req("/", "GET", undefined, result.token))).rejects.toMatchObject({ status: 401 });
-        expect(await requireAccount(req("/", "GET", undefined, changed))).toEqual(a);
-        await expect(login({ username: a.username, password })).rejects.toMatchObject({ status: 401 });
-        await query("UPDATE sessions SET expires_at=now()-interval '1 second' WHERE token_hash=$1", [tokenHash(changed)]);
-        await expect(requireAccount(req("/", "GET", undefined, changed))).rejects.toMatchObject({ status: 401 });
+        const other = await account();
+        await query('DELETE FROM identity_sessions WHERE "userId"=$1', [other.userId]);
+        await expect(requireAccount(req("/", "GET", undefined, other.token))).rejects.toMatchObject({ status: 401 });
     });
-    it("API requires auth, same-origin, rejects invalid config without leaking input, and caps login attempts despite forged cookies", async () => {
+    it("API requires auth, same-origin, rejects invalid config without leaking input, and caps login attempts despite retired login credentials", async () => {
         expect((await handleModel("get", req("/api/workspace/model"))).status).toBe(401);
         const { account: a, token } = await account();
-        const badOrigin = new Request(`${origin}/api/workspace/model`, { method: "PUT", headers: { cookie: `hikari_session=${token}`, "content-type": "application/json" }, body: "{}" });
+        const badOrigin = new Request(`${origin}/api/workspace/model`, { method: "PUT", headers: { cookie: `hikari_identity.session_token=${token}`, "content-type": "application/json" }, body: "{}" });
         expect((await handleModel("put", badOrigin)).status).toBe(403);
         const response = await handleModel("put", req("/api/workspace/model", "PUT", { apiKey: "sensitive-input" }, token));
         expect(response.status).toBe(400);
@@ -175,7 +159,7 @@ database("workspace foundation real PostgreSQL (explicit HIKARI_TEST_DATABASE_UR
         const attempts = [];
         for (let i = 0; i < 11; i++)
             attempts.push(await handleAuth("login", req("/api/workspace/auth/login", "POST", { username: a.username, password: "bad-password-long" }, randomBytes(32).toString("base64url"))));
-        expect(attempts.at(-1)!.status).toBe(429);
+        expect(attempts.every(response => response.status === 410)).toBe(true);
     });
     it("limits atomically across concurrent clients", async () => {
         const key = `test:${randomUUID()}`;
@@ -431,7 +415,7 @@ database("workspace foundation real PostgreSQL (explicit HIKARI_TEST_DATABASE_UR
     it("deletes account/session/config and account foundation rows without touching other owners", async () => {
         const { account: a } = await configured();
         const b = await account();
-        await deleteAccount(a.id, password);
+        await query("DELETE FROM accounts WHERE id=$1", [a.id]);
         for (const table of ["accounts", "sessions", "model_configs"]) {
             const result = await query(`SELECT 1 FROM ${table} WHERE ${table === "accounts" ? "id" : "owner_id"}=$1`, [a.id]);
             expect(result.rowCount).toBe(0);

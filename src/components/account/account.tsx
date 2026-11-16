@@ -3,14 +3,16 @@ import { lockModalPage, unlockModalPage } from "../shared/modal-lock";
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import type { ModelConfigView } from "@/domain/workspace/model";
 import { workspaceApi, WorkspaceError } from "./api";
-import { AccountGate, Settings } from "./settings";
+import { Settings } from "./settings";
+import { purgePlannerAccount } from "../shooting-planner/storage";
+import { authAction } from "./navigation";
 export const WORKSPACE_EVENT = "hikari:workspace-invalidated";
 export const WORKSPACE_STORAGE = "hikari:workspace:invalidate";
 export function announceWorkspaceChange() {
   window.dispatchEvent(new Event(WORKSPACE_EVENT));
   try { localStorage.setItem(WORKSPACE_STORAGE, crypto.randomUUID()); } catch { }
 }
-type Account = { id: string; username: string };
+type Account = { id: string; username: string; email: string; deletionStage?: string };
 type AccountContext = { owner: Account | null; config: ModelConfigView | null; booting: boolean; epoch: number;
   accountBusy: boolean; runAccountAction: (task: () => Promise<unknown>) => Promise<void>; refreshConfig: () => Promise<void>; openAccount: () => void;
   requestPlannerSync: () => void; registerPlannerSync: (handler: () => void) => () => void; };
@@ -33,19 +35,19 @@ export function WorkspaceAccountProvider({ children }: { children: ReactNode }) 
   const dialog = useRef<HTMLDialogElement>(null), returnFocus = useRef<HTMLElement | null>(null), scrollLock = useRef(Symbol("account"));
   const plannerSyncAction = useRef<(() => void) | null>(null);
   const replaceOwner = useCallback((next: Account | null) => {
-    if (ownerRef.current?.id === next?.id) return;
+    if (ownerRef.current?.id === next?.id && ownerRef.current?.deletionStage === next?.deletionStage) { ownerRef.current = next; setOwner(next); return; }
     generation.current++; modelRequest.current++;
     ownerRef.current = next; latestConfig.current = null; setOwner(next); setConfig(null); setEpoch(generation.current);
   }, []);
   const refreshConfig = useCallback(async () => {
-    const account = ownerRef.current, token = generation.current, modelToken = ++modelRequest.current; if (!account) return;
+    const account = ownerRef.current, token = generation.current, modelToken = ++modelRequest.current; if (!account || account.deletionStage) return;
     try { const next = await workspaceApi<ModelConfigView>("model"); if (token === generation.current && modelToken === modelRequest.current) { if (!latestConfig.current || latestConfig.current.version <= next.version) latestConfig.current = next; setConfig(latestConfig.current); } }
     catch (error) { if (token === generation.current && modelToken === modelRequest.current) { if ((error as WorkspaceError).code === "UNAUTHORIZED") replaceOwner(null); else setMessage((error as Error).message); } }
   }, [replaceOwner]);
   const revalidate = useCallback(async () => {
     const token = ++request.current;
     try { const next = await workspaceApi<Account>("auth/session"); if (token !== request.current) return; replaceOwner(next); await refreshConfig(); }
-    catch (error) { if (token === request.current) { if ((error as WorkspaceError).code === "UNAUTHORIZED") replaceOwner(null); else setMessage((error as Error).message); } }
+    catch (error) { if (token === request.current) { if ((error as WorkspaceError).code === "UNAUTHORIZED") { replaceOwner(null); const deleted = sessionStorage.getItem("hikari:deleting-owner"); if (deleted) { await purgePlannerAccount(deleted); sessionStorage.removeItem("hikari:deleting-owner"); } } else setMessage((error as Error).message); } }
     finally { if (token === request.current) setBooting(false); }
   }, [replaceOwner, refreshConfig]);
   const invalidateRequests = useCallback(() => { request.current++; modelRequest.current++; }, []);
@@ -64,19 +66,19 @@ export function WorkspaceAccountProvider({ children }: { children: ReactNode }) 
     return () => { invalidateRequests(); window.removeEventListener("focus", revalidate); window.removeEventListener("storage", storage); window.removeEventListener(WORKSPACE_EVENT, changed); };
   }, [revalidate, invalidateRequests]);
   useEffect(() => { const holder = scrollLock.current; return () => unlockModalPage(holder); }, []);
-  const openAccount = useCallback(() => { if (dialog.current?.open) return; returnFocus.current = document.activeElement as HTMLElement; setFormEpoch(n => n + 1); setAccountOpen(true); dialog.current?.showModal(); lockModalPage(scrollLock.current); }, []);
+  const openAccount = useCallback(() => { returnFocus.current = document.activeElement as HTMLElement; setMessage(""); if (!ownerRef.current) { void runAccountAction(() => authAction("sign-in/social")).catch(error => { setMessage(error.message); setAccountOpen(true); dialog.current?.showModal(); lockModalPage(scrollLock.current); }); return; } if (dialog.current?.open) return; returnFocus.current = document.activeElement as HTMLElement; setFormEpoch(n => n + 1); setAccountOpen(true); dialog.current?.showModal(); lockModalPage(scrollLock.current); }, [runAccountAction]);
   const close = () => { unlockModalPage(scrollLock.current); setAccountOpen(false); dialog.current?.close(); };
-  function signedIn(next: Account) { request.current++; replaceOwner(next); setBooting(false); void refreshConfig(); announceWorkspaceChange(); close(); }
   function signedOut() { request.current++; replaceOwner(null); announceWorkspaceChange(); }
+  function deleted() { signedOut(); setMessage("账户与私人资料已注销"); }
   return <Context.Provider value={{ owner, config, booting, epoch, refreshConfig, openAccount, accountBusy, runAccountAction, requestPlannerSync, registerPlannerSync }}>{children}
     <dialog ref={dialog} className="workspace-account-dialog account-app" aria-label="全局账户与模型设置" onCancel={() => { unlockModalPage(scrollLock.current); setAccountOpen(false); }} onClose={() => { if (dialog.current?.open) return; setAccountOpen(false); unlockModalPage(scrollLock.current); const target = returnFocus.current?.isConnected ? returnFocus.current : document.querySelector<HTMLElement>(".header-account"); target?.focus({ preventScroll: true }); }}>
       <div className="workspace-account-heading"><span>逐光 · 通行与工具</span><button aria-label="关闭账户设置" onClick={close}>×</button></div>
-      {accountOpen && (owner ? <Settings key={`${owner.id}:${epoch}:${formEpoch}`} onClose={close} onLogout={signedOut} /> : <AccountGate key={`${epoch}:${formEpoch}`} onAccount={signedIn} />)}
+      {accountOpen && (owner ? <Settings key={`${owner.id}:${epoch}:${formEpoch}`} onClose={close} onLogout={signedOut} onDeleted={deleted} /> : <section className="account-gate"><h1>登录逐光</h1><button onClick={() => { close(); openAccount(); }}>重新连接登录页</button></section>)}
       {message && <p role="alert">{message}</p>}
     </dialog>
   </Context.Provider>;
 }
 export function WorkspaceAccountButton() {
-  const { owner, booting, openAccount } = useWorkspaceAccount();
-  return <button className="header-account" onClick={openAccount} disabled={booting}>{booting ? "账户…" : owner ? `${owner.username} · 设置` : "登录 / 注册"}</button>;
+  const { owner, booting, openAccount, accountBusy } = useWorkspaceAccount();
+  return <button className="header-account" onClick={openAccount} disabled={booting || accountBusy}>{accountBusy ? "正在连接…" : booting ? "账户…" : owner ? `${owner.username} · 设置` : "登录 / 注册"}</button>;
 }

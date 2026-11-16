@@ -12,7 +12,7 @@ import { knowledgeImportSchema } from "../../src/domain/workspace/knowledge";
 import { ADVICE_QUALITY_VERSION } from "../../src/domain/workspace/advice";
 import { closeDatabase, query, transaction, withOwnerLock } from "../../src/server/workspace/db";
 import { migrate } from "../../src/server/workspace/migrate";
-import { register } from "../../src/server/workspace/auth";
+import { register } from "../fixtures/workspace/identity";
 import { deleteModelConfig, putModelConfig, storeCapabilities } from "../../src/server/workspace/config";
 import { enhanceBriefing, buildAdviceInput } from "../../src/server/workspace/advice";
 import { GENRES, adviceContext, buildAdviceFacts, unsafeAdviceText, validateGenreNarrative } from "../../src/server/workspace/advice-policy";
@@ -27,7 +27,7 @@ const database = testUrl ? describe : describe.skip;
 const owners: string[] = [], sources: string[] = [];
 const source = () => { const id = `test-${randomUUID()}`; sources.push(id); return knowledgeImportSchema.parse({ ...corpus, source: { ...corpus.source, id } }); };
 const byGenre = (g: Genre) => rankKnowledge(originalEvidence, adviceContext(qualityBriefing(), g), "", 30);
-const req = (path: string, body?: unknown, token?: string, origin = "http://localhost:3000") => new Request(`http://localhost:3000${path}`, { method: body ? "POST" : "GET", headers: { origin, "content-type": "application/json", ...(token ? { cookie: `hikari_session=${token}` } : {}) }, ...(body ? { body: JSON.stringify(body) } : {}) });
+const req = (path: string, body?: unknown, token?: string, origin = "http://localhost:3000") => new Request(`http://localhost:3000${path}`, { method: body ? "POST" : "GET", headers: { origin, "content-type": "application/json", ...(token ? { cookie: `hikari_identity.session_token=${token}` } : {}) }, ...(body ? { body: JSON.stringify(body) } : {}) });
 async function account(configured = false) {
   const a = await register({ username: `a_${randomUUID().replaceAll("-", "").slice(0, 20)}`, password: "advice-test-password" }); owners.push(a.account.id);
   if (configured) {

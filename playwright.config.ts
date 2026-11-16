@@ -17,7 +17,7 @@ export default defineConfig({
   ],
   webServer: {
     command: "pnpm dev --hostname 127.0.0.1 --port 3100",
-    env: { HIKARI_E2E_DIST: "1" },
+    env: { HIKARI_E2E_DIST: "1", HIKARI_AUTH_SECRET: process.env.HIKARI_AUTH_SECRET || "explicit-e2e-identity-test-secret-32", AUTHING_APP_HOST: "https://identity.example.invalid", AUTHING_APP_ID: "test-client", AUTHING_APP_SECRET: "test-client-secret" },
     url: "http://127.0.0.1:3100",
     reuseExistingServer: false,
     timeout: 120_000,

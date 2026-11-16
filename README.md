@@ -73,7 +73,7 @@ pnpm dev
 - [打开应用](http://localhost:3000) — 选择中国大陆城市或区域，加载当天简报。
 - [打开展示页](http://localhost:3000/showcase) — 使用固定样例体验界面与交互。
 
-核心天气页面可直接启动。账户、模型配置与账户计划同步使用 PostgreSQL 15+，环境配置参考 [.env.example](.env.example)。准备数据库与服务端配置后执行以下命令。
+核心天气页面可直接启动。账户使用 Authing 邮箱验证码与 Better Auth OIDC 会话，[接入与注销恢复](docs/AUTHING_SETUP.md)说明控制台及本地配置。模型配置与账户计划同步使用 PostgreSQL 15+，环境配置参考 [.env.example](.env.example)。准备数据库与服务端配置后执行以下命令。
 
 ```sh
 pnpm workspace:migrate
